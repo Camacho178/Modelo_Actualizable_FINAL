@@ -994,6 +994,152 @@ st.markdown("""
         justify-content: space-between;
     }
 
+    /* ANÁLISIS DE RIESGO */
+    .risk-card {
+        background: white;
+        border: 1px solid #e9edf3;
+        border-radius: 14px;
+        padding: 14px 16px;
+        min-height: 120px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .risk-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .risk-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: #edf3ff;
+        color: #16337b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .risk-tag {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .risk-tag.high {
+        background: #ffe9ee;
+        color: #a63545;
+    }
+
+    .risk-tag.med {
+        background: #fff4e8;
+        color: #8b6a00;
+    }
+
+    .risk-tag.low {
+        background: #e8f7f1;
+        color: #1f7a5c;
+    }
+
+    .risk-card-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #16337b;
+    }
+
+    .risk-card-label {
+        font-size: 12px;
+        color: #5d6c80;
+        margin-top: 4px;
+    }
+
+    .risk-card-sub {
+        font-size: 11px;
+        color: #7a8aa0;
+        margin-top: 2px;
+    }
+
+    .risk-panel {
+        background: white;
+        border: 1px solid #e9edf3;
+        border-radius: 14px;
+        padding: 14px 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        margin-bottom: 16px;
+    }
+
+    .risk-panel-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #16337b;
+        margin-bottom: 10px;
+    }
+
+    .risk-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
+
+    .risk-table th {
+        text-align: left;
+        font-size: 11px;
+        color: #7a8aa0;
+        font-weight: 700;
+        padding: 4px 10px;
+    }
+
+    .risk-table td {
+        background: #f7f9fc;
+        border: 1px solid #e6edf5;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 12px;
+        color: #16337b;
+    }
+
+    .risk-chip {
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        display: inline-block;
+    }
+
+    .risk-chip.high {
+        background: #ffe9ee;
+        color: #a63545;
+    }
+
+    .risk-chip.med {
+        background: #fff4e8;
+        color: #8b6a00;
+    }
+
+    .risk-chip.low {
+        background: #e8f7f1;
+        color: #1f7a5c;
+    }
+
+    .risk-anim {
+        animation: riseIn 0.65s ease both;
+    }
+
+    .risk-delay-1 { animation-delay: 0.05s; }
+    .risk-delay-2 { animation-delay: 0.12s; }
+    .risk-delay-3 { animation-delay: 0.18s; }
+    .risk-delay-4 { animation-delay: 0.24s; }
+
+    @keyframes riseIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     /* RECOMENDACIONES (ACORDEON) */
     details.rec-accordion {
         background: white;
@@ -1736,41 +1882,78 @@ with tabs[2]:
 
     risk_score = float(df_risk["risk_score"].mean() * 100) if not df_risk.empty else 0
     high_risk_pct = float((df_risk["risk_level"] == "Alto").mean() * 100) if not df_risk.empty else 0
+    high_risk_count = int((df_risk["risk_level"] == "Alto").sum()) if not df_risk.empty else 0
     workload_avg = float(df_risk["workload"].mean()) if not df_risk.empty else 0
     abs_rate = float(df_risk["absenteeism"].mean() / 80 * 100) if not df_risk.empty else 0
 
+    def risk_tag(score):
+        if score >= 66:
+            return "Alto", "high"
+        if score >= 33:
+            return "Medio", "med"
+        return "Bajo", "low"
+
+    score_label, score_class = risk_tag(risk_score)
+    abs_label, abs_class = risk_tag(abs_rate)
+    hr_label, hr_class = risk_tag(high_risk_pct)
+
     k1, k2, k3, k4 = st.columns(4)
-    k1.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Score de Riesgo</div>
-    <div class='kpi-value'>{risk_score:.1f}/100</div>
-    <div class='kpi-sub'>+3.2% este mes</div>
+    k1.markdown(
+        f"""
+<div class='risk-card risk-anim risk-delay-1'>
+    <div class='risk-card-top'>
+        <div class='risk-icon'>R</div>
+        <span class='risk-tag {score_class}'>{score_label}</span>
+    </div>
+    <div class='risk-card-value'>{risk_score:.0f}/100</div>
+    <div class='risk-card-label'>Score de Riesgo General</div>
+    <div class='risk-card-sub'>+3.2% este mes</div>
 </div>
-    """, unsafe_allow_html=True)
-
-    k2.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Alto Riesgo</div>
-    <div class='kpi-value' style='color:#E74C3C;'>{high_risk_pct:.1f}%</div>
-    <div class='kpi-sub'>Población crítica</div>
+        """,
+        unsafe_allow_html=True
+    )
+    k2.markdown(
+        f"""
+<div class='risk-card risk-anim risk-delay-2'>
+    <div class='risk-card-top'>
+        <div class='risk-icon'>B</div>
+        <span class='risk-tag {score_class}'>Alto</span>
+    </div>
+    <div class='risk-card-value'>{prob_burnout:.0f}%</div>
+    <div class='risk-card-label'>Probabilidad de Burnout</div>
+    <div class='risk-card-sub'>+5% este mes</div>
 </div>
-    """, unsafe_allow_html=True)
-
-    k3.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Carga de Trabajo</div>
-    <div class='kpi-value'>{workload_avg:.1f}/150</div>
-    <div class='kpi-sub'>Promedio actual</div>
+        """,
+        unsafe_allow_html=True
+    )
+    k3.markdown(
+        f"""
+<div class='risk-card risk-anim risk-delay-3'>
+    <div class='risk-card-top'>
+        <div class='risk-icon'>A</div>
+        <span class='risk-tag {hr_class}'>{high_risk_pct:.0f}%</span>
+    </div>
+    <div class='risk-card-value'>{high_risk_count}</div>
+    <div class='risk-card-label'>Empleados en Alto Riesgo</div>
+    <div class='risk-card-sub'>+45 empleados</div>
 </div>
-    """, unsafe_allow_html=True)
-
-    k4.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Ausentismo</div>
-    <div class='kpi-value'>{abs_rate:.1f}%</div>
-    <div class='kpi-sub'>Índice estimado</div>
+        """,
+        unsafe_allow_html=True
+    )
+    k4.markdown(
+        f"""
+<div class='risk-card risk-anim risk-delay-4'>
+    <div class='risk-card-top'>
+        <div class='risk-icon'>T</div>
+        <span class='risk-tag {abs_class}'>{abs_label}</span>
+    </div>
+    <div class='risk-card-value'>{abs_rate:.1f}%</div>
+    <div class='risk-card-label'>Tasa de Ausentismo</div>
+    <div class='risk-card-sub'>+1.2% este mes</div>
 </div>
-    """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
 
     st.markdown("<div class='section-title'>Evolución Histórica del Riesgo</div>", unsafe_allow_html=True)
 
@@ -1816,45 +1999,101 @@ with tabs[2]:
     apply_plotly_style(fig_trend)
     st.plotly_chart(fig_trend, use_container_width=True)
 
-    st.markdown("<div class='section-title'>Distribución y Comparativa</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>Distribución y Categorías</div>", unsafe_allow_html=True)
 
     c_left, c_right = st.columns(2)
 
     with c_left:
-        fig_hist = px.histogram(
-            df_risk,
-            x="risk_score",
-            nbins=20,
-            color="risk_level",
-            color_discrete_sequence=["#25b5e8", "#16337b", "#ff6b81"]
+        risk_dist = (
+            df_risk["risk_level"]
+            .value_counts(normalize=True)
+            .reindex(["Bajo", "Medio", "Alto"])
+            .fillna(0)
+            .reset_index()
         )
-        fig_hist.update_layout(
-            height=380,
-            xaxis=dict(title="Score de Riesgo"),
-            yaxis=dict(title="Número de empleados"),
-            legend_title_text="Nivel de riesgo"
+        risk_dist.columns = ["Nivel", "Porcentaje"]
+        risk_dist["Porcentaje"] = risk_dist["Porcentaje"] * 100
+        fig_donut = px.pie(
+            risk_dist,
+            names="Nivel",
+            values="Porcentaje",
+            hole=0.65,
+            color="Nivel",
+            color_discrete_map={"Bajo": "#25b5e8", "Medio": "#16337b", "Alto": "#ff6b81"}
         )
-        apply_plotly_style(fig_hist)
-        st.plotly_chart(fig_hist, use_container_width=True)
+        fig_donut.update_traces(
+            textinfo="percent+label",
+            hovertemplate="<b>%{label}</b><br>%{value:.1f}%<extra></extra>"
+        )
+        fig_donut.update_layout(height=360, legend_title_text="Nivel de riesgo")
+        apply_plotly_style(fig_donut)
+        st.plotly_chart(fig_donut, use_container_width=True)
 
     with c_right:
-        fig_violin = px.violin(
-            df_risk,
-            x="risk_level",
-            y="risk_score",
-            color="risk_level",
-            box=True,
-            points="all",
-            color_discrete_sequence=["#25b5e8", "#16337b", "#ff6b81"]
+        cat_df = pd.DataFrame({
+            "Categoría": ["Psicosocial", "Burnout", "Organizacional", "Ausentismo", "Operativo"],
+            "Indice": [45, 40, 35, 28, 22],
+        })
+        fig_cat = px.bar(
+            cat_df,
+            x="Indice",
+            y="Categoría",
+            orientation="h",
+            color="Indice",
+            color_continuous_scale=["#dbe9ff", "#16337b"]
         )
-        fig_violin.update_layout(
-            height=380,
-            xaxis=dict(title="Nivel de riesgo"),
-            yaxis=dict(title="Score de riesgo"),
-            legend_title_text="Nivel de riesgo"
+        fig_cat.update_layout(
+            height=360,
+            xaxis=dict(title="Indice", range=[0, 60]),
+            yaxis=dict(title=""),
+            coloraxis_showscale=False
         )
-        apply_plotly_style(fig_violin)
-        st.plotly_chart(fig_violin, use_container_width=True)
+        apply_plotly_style(fig_cat)
+        st.plotly_chart(fig_cat, use_container_width=True)
+
+    st.markdown("<div class='section-title'>Análisis de Horas Extra</div>", unsafe_allow_html=True)
+
+    overtime_rows = [
+        {"dept": "Operaciones", "avg": "15.5h", "max": "28h", "affected": 85, "risk": "Alto"},
+        {"dept": "Ventas", "avg": "8.2h", "max": "18h", "affected": 52, "risk": "Medio"},
+        {"dept": "IT", "avg": "6.5h", "max": "14h", "affected": 38, "risk": "Bajo"},
+        {"dept": "RRHH", "avg": "2.5h", "max": "8h", "affected": 12, "risk": "Bajo"},
+        {"dept": "Finanzas", "avg": "4.2h", "max": "12h", "affected": 28, "risk": "Bajo"},
+    ]
+
+    row_html = ""
+    for row in overtime_rows:
+        chip_class = "high" if row["risk"] == "Alto" else "med" if row["risk"] == "Medio" else "low"
+        row_html += f"""
+<tr>
+    <td>{row['dept']}</td>
+    <td>{row['avg']}</td>
+    <td>{row['max']}</td>
+    <td>{row['affected']}</td>
+    <td><span class='risk-chip {chip_class}'>{row['risk']}</span></td>
+</tr>
+        """
+
+    table_html = f"""
+<div class='risk-panel risk-anim risk-delay-2'>
+    <div class='risk-panel-title'>Análisis de Horas Extra</div>
+    <table class='risk-table'>
+        <thead>
+            <tr>
+                <th>Departamento</th>
+                <th>Promedio Semanal</th>
+                <th>Máximo Registrado</th>
+                <th>Empleados Afectados</th>
+                <th>Nivel de Riesgo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {row_html}
+        </tbody>
+    </table>
+</div>
+    """
+    st.markdown(table_html, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
