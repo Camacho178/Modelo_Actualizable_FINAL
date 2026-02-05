@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import plotly.graph_objects as go
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
@@ -635,6 +636,194 @@ st.markdown("""
         margin-right: 6px;
         color: #16337b;
         font-weight: 600;
+    }
+
+    /* SEGMENTACIÓN */
+    .seg-hero-card {
+        background: white;
+        border: 1px solid #e9edf3;
+        border-radius: 14px;
+        padding: 14px 16px;
+        min-height: 110px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .seg-hero-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .seg-hero-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 6px;
+    }
+
+    .seg-hero-sub {
+        font-size: 12px;
+        color: #6f7f96;
+        margin-top: 2px;
+    }
+
+    .seg-hero-card.seg-risk {
+        background: #fff3f4;
+        border-color: #ffd3da;
+    }
+
+    .seg-hero-card.seg-risk .seg-hero-label,
+    .seg-hero-card.seg-risk .seg-hero-title {
+        color: #a63545;
+    }
+
+    .seg-hero-card.seg-sat {
+        background: #f1fbf5;
+        border-color: #cfeedd;
+    }
+
+    .seg-hero-card.seg-sat .seg-hero-label,
+    .seg-hero-card.seg-sat .seg-hero-title {
+        color: #1f7a5c;
+    }
+
+    .seg-hero-card.seg-cap {
+        background: #fff8e7;
+        border-color: #f5e0a6;
+    }
+
+    .seg-hero-card.seg-cap .seg-hero-label,
+    .seg-hero-card.seg-cap .seg-hero-title {
+        color: #8b6a00;
+    }
+
+    .seg-card {
+        background: white;
+        border: 1px solid #e9edf3;
+        border-radius: 14px;
+        padding: 14px 16px;
+        position: relative;
+        min-height: 175px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .seg-card-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .seg-card-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: #edf3ff;
+        color: #16337b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .seg-card-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #16337b;
+    }
+
+    .seg-card-sub {
+        font-size: 12px;
+        color: #7a8aa0;
+    }
+
+    .seg-risk-badge {
+        position: absolute;
+        top: 14px;
+        right: 16px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+        color: white;
+    }
+
+    .seg-risk-high {
+        background: #ff6b81;
+    }
+
+    .seg-risk-mid {
+        background: #f2c94c;
+        color: #714f00;
+    }
+
+    .seg-risk-low {
+        background: #2ecc71;
+    }
+
+    .seg-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 12px;
+        margin-top: 12px;
+        font-size: 12px;
+        color: #5d6c80;
+    }
+
+    .seg-metrics b {
+        display: block;
+        font-size: 13px;
+        color: #16337b;
+    }
+
+    .seg-sub-card {
+        background: white;
+        border: 1px solid #e9edf3;
+        border-radius: 12px;
+        padding: 14px 16px;
+    }
+
+    .seg-sub-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #16337b;
+        margin-bottom: 6px;
+    }
+
+    .seg-sub-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #5d6c80;
+        margin-bottom: 4px;
+    }
+
+    .seg-progress {
+        height: 6px;
+        background: #e9edf3;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 8px;
+    }
+
+    .seg-progress-bar {
+        height: 100%;
+        background: #25b5e8;
+        border-radius: 999px;
+    }
+
+    .seg-capacity-high {
+        color: #a63545;
+        font-weight: 700;
+    }
+
+    .seg-capacity-ok {
+        color: #1f7a5c;
+        font-weight: 700;
     }
 
     /* RECOMENDACIONES (ACORDEON) */
@@ -1676,120 +1865,201 @@ with tabs[3]:
 with tabs[4]:
     st.markdown("<div class='fade-in'>", unsafe_allow_html=True)
 
-    st.markdown("<div class='section-title'>Segmentación</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>Segmentación por Áreas</div>", unsafe_allow_html=True)
 
-    f1, f2 = st.columns(2)
-    dept_options = sorted(df["department"].unique())
-    dept_filter = f1.multiselect("Departamentos", dept_options, default=dept_options, key="seg_dept")
-    risk_filter = f2.multiselect("Nivel de riesgo", ["Bajo", "Medio", "Alto"], default=["Bajo", "Medio", "Alto"], key="seg_risk")
+    segment_depts = [
+        {"name": "Operaciones", "employees": 285, "satisfaction": 5.2, "overtime": 12.5, "burnout": 38, "risk": 45},
+        {"name": "Ventas", "employees": 220, "satisfaction": 6.8, "overtime": 8.2, "burnout": 25, "risk": 30},
+        {"name": "IT", "employees": 195, "satisfaction": 7.5, "overtime": 6.5, "burnout": 18, "risk": 22},
+        {"name": "RRHH", "employees": 85, "satisfaction": 8.2, "overtime": 3.8, "burnout": 10, "risk": 12},
+        {"name": "Finanzas", "employees": 140, "satisfaction": 8.5, "overtime": 2.5, "burnout": 6, "risk": 8},
+        {"name": "Marketing", "employees": 120, "satisfaction": 7.8, "overtime": 5.2, "burnout": 12, "risk": 15},
+    ]
 
-    df_seg = df.copy()
-    if dept_filter:
-        df_seg = df_seg[df_seg["department"].isin(dept_filter)]
-    if risk_filter:
-        df_seg = df_seg[df_seg["risk_level"].isin(risk_filter)]
+    subdivisions = [
+        {"name": "Norte", "employees": 380, "capacity": 130, "risk": 42},
+        {"name": "Sur", "employees": 285, "capacity": 75, "risk": 18},
+        {"name": "Este", "employees": 320, "capacity": 95, "risk": 28},
+        {"name": "Oeste", "employees": 260, "capacity": 85, "risk": 22},
+    ]
 
-    seg_counts = df_seg["risk_level"].value_counts().reindex(["Bajo", "Medio", "Alto"]).fillna(0)
-    k1, k2, k3 = st.columns(3)
-    k1.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Riesgo Bajo</div>
-    <div class='kpi-value'>{int(seg_counts.get("Bajo", 0))}</div>
-    <div class='kpi-sub'>Empleados</div>
-</div>
-    """, unsafe_allow_html=True)
-    k2.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Riesgo Medio</div>
-    <div class='kpi-value'>{int(seg_counts.get("Medio", 0))}</div>
-    <div class='kpi-sub'>Empleados</div>
-</div>
-    """, unsafe_allow_html=True)
-    k3.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Riesgo Alto</div>
-    <div class='kpi-value' style='color:#E74C3C;'>{int(seg_counts.get("Alto", 0))}</div>
-    <div class='kpi-sub'>Empleados</div>
-</div>
-    """, unsafe_allow_html=True)
+    dept_names = [d["name"] for d in segment_depts]
+    sub_names = [s["name"] for s in subdivisions]
 
-    st.markdown("<div class='section-title'>Distribución por Departamento</div>", unsafe_allow_html=True)
+    spacer, f_dept, f_sub = st.columns([2.4, 1.2, 1.2])
+    with f_dept:
+        selected_dept = st.selectbox(
+            "Departamento",
+            ["Todos los Departamentos"] + dept_names,
+            index=0,
+            key="seg_dept_v2"
+        )
+    with f_sub:
+        selected_sub = st.selectbox(
+            "Subdivisión",
+            ["Todas las Subdivisiones"] + sub_names,
+            index=0,
+            key="seg_sub_v2"
+        )
 
-    seg_df = df_seg.groupby(["department", "risk_level"]).size().reset_index(name="count")
-
-    fig_seg = px.bar(
-        seg_df,
-        x="department",
-        y="count",
-        color="risk_level",
-        barmode="stack",
-        color_discrete_sequence=["#25b5e8", "#16337b", "#ff6b81"]
+    dept_filtered = (
+        segment_depts if selected_dept == "Todos los Departamentos"
+        else [d for d in segment_depts if d["name"] == selected_dept]
+    )
+    sub_filtered = (
+        subdivisions if selected_sub == "Todas las Subdivisiones"
+        else [s for s in subdivisions if s["name"] == selected_sub]
     )
 
-    fig_seg.update_layout(
-        height=420,
-        xaxis=dict(title="Departamento", showgrid=False),
-        yaxis=dict(title="Número de empleados"),
-        legend_title_text="Nivel de riesgo"
+    risk_top = max(segment_depts, key=lambda d: d["risk"])
+    sat_top = max(segment_depts, key=lambda d: d["satisfaction"])
+    cap_top = max(subdivisions, key=lambda s: s["capacity"])
+
+    h1, h2, h3 = st.columns(3)
+    h1.markdown(
+        f"""
+<div class='seg-hero-card seg-risk'>
+    <div class='seg-hero-label'>Mayor Riesgo</div>
+    <div class='seg-hero-title'>{risk_top['name']}</div>
+    <div class='seg-hero-sub'>{risk_top['risk']}% de riesgo con {risk_top['employees']} empleados afectados</div>
+</div>
+        """,
+        unsafe_allow_html=True
+    )
+    h2.markdown(
+        f"""
+<div class='seg-hero-card seg-sat'>
+    <div class='seg-hero-label'>Mayor Satisfacción</div>
+    <div class='seg-hero-title'>{sat_top['name']}</div>
+    <div class='seg-hero-sub'>{sat_top['satisfaction']}/10 de satisfacción promedio</div>
+</div>
+        """,
+        unsafe_allow_html=True
+    )
+    h3.markdown(
+        f"""
+<div class='seg-hero-card seg-cap'>
+    <div class='seg-hero-label'>Sobrecapacidad</div>
+    <div class='seg-hero-title'>Subdivisión {cap_top['name']}</div>
+    <div class='seg-hero-sub'>{cap_top['capacity']}% de capacidad · requiere balanceo</div>
+</div>
+        """,
+        unsafe_allow_html=True
     )
 
-    apply_plotly_style(fig_seg, font_color="#16337b", grid_color="#dbe3eb")
-    st.plotly_chart(fig_seg, use_container_width=True)
+    st.markdown("<div class='section-title'>Departamentos Clave</div>", unsafe_allow_html=True)
 
-    st.markdown("<div class='section-title'>Departamentos con Alto Riesgo</div>", unsafe_allow_html=True)
+    def risk_class(value):
+        if value >= 35:
+            return "seg-risk-high"
+        if value >= 20:
+            return "seg-risk-mid"
+        return "seg-risk-low"
 
-    c_left, c_right = st.columns(2)
+    def initials(name):
+        parts = name.split()
+        initials_val = "".join([p[0] for p in parts if p])[:2]
+        return initials_val.upper()
 
-    with c_left:
-        high_df = (
-            df_seg[df_seg["risk_level"] == "Alto"]
-            .groupby("department")
-            .size()
-            .reset_index(name="count")
-            .sort_values("count", ascending=True)
-        )
-        fig_high = px.bar(
-            high_df,
-            x="count",
-            y="department",
-            orientation="h",
-            color="count",
-            color_continuous_scale=["#dbe3eb", "#ff6b81", "#E74C3C"]
-        )
-        fig_high.update_layout(
-            height=350,
-            xaxis=dict(title="Empleados en alto riesgo"),
-            yaxis=dict(title="Departamento", showgrid=False),
-            coloraxis_showscale=False
-        )
-        apply_plotly_style(fig_high)
-        st.plotly_chart(fig_high, use_container_width=True)
+    for i in range(0, len(dept_filtered), 3):
+        row = dept_filtered[i:i + 3]
+        cols = st.columns(3)
+        for idx, dept in enumerate(row):
+            badge_class = risk_class(dept["risk"])
+            card_html = f"""
+<div class='seg-card'>
+    <div class='seg-card-top'>
+        <div class='seg-card-icon'>{initials(dept['name'])}</div>
+        <div>
+            <div class='seg-card-title'>{dept['name']}</div>
+            <div class='seg-card-sub'>{dept['employees']} empleados</div>
+        </div>
+    </div>
+    <div class='seg-risk-badge {badge_class}'>{dept['risk']}%</div>
+    <div class='seg-metrics'>
+        <div><span>Satisfacción</span><b>{dept['satisfaction']}/10</b></div>
+        <div><span>Horas Extra</span><b>{dept['overtime']}h</b></div>
+        <div><span>Burnout</span><b>{dept['burnout']}%</b></div>
+        <div><span>Riesgo</span><b>{dept['risk']}%</b></div>
+    </div>
+</div>
+            """
+            cols[idx].markdown(card_html, unsafe_allow_html=True)
 
-    with c_right:
-        risk_share = (
-            df_seg["risk_level"]
-            .value_counts(normalize=True)
-            .reindex(["Bajo", "Medio", "Alto"])
-            .fillna(0)
-            .reset_index()
+    st.markdown("<div class='section-title'>Distribución por Subdivisión</div>", unsafe_allow_html=True)
+
+    sub_cols = st.columns(4)
+    for idx, sub in enumerate(sub_filtered):
+        cap_class = "seg-capacity-high" if sub["capacity"] >= 110 else "seg-capacity-ok"
+        bar_class = risk_class(sub["risk"])
+        bar_color = "#ff6b81" if bar_class == "seg-risk-high" else "#f2c94c" if bar_class == "seg-risk-mid" else "#25b5e8"
+        card_html = f"""
+<div class='seg-sub-card'>
+    <div class='seg-sub-title'>{sub['name']}</div>
+    <div class='seg-sub-row'><span>Empleados:</span><b>{sub['employees']}</b></div>
+    <div class='seg-sub-row'><span>Capacidad:</span><span class='{cap_class}'>{sub['capacity']}%</span></div>
+    <div class='seg-sub-row'><span>Riesgo:</span><b>{sub['risk']}%</b></div>
+    <div class='seg-progress'>
+        <div class='seg-progress-bar' style='width:{sub['risk']}%; background:{bar_color};'></div>
+    </div>
+</div>
+        """
+        sub_cols[idx % 4].markdown(card_html, unsafe_allow_html=True)
+
+    st.markdown("<div class='section-title'>Comparación de Riesgo por Departamento</div>", unsafe_allow_html=True)
+
+    chart_left, chart_right = st.columns(2)
+
+    with chart_left:
+        bar_df = pd.DataFrame(segment_depts)
+        if selected_dept != "Todos los Departamentos":
+            bar_df = bar_df[bar_df["name"] == selected_dept]
+        fig_compare = px.bar(
+            bar_df,
+            x="name",
+            y="risk",
+            color="name",
+            color_discrete_sequence=["#16337b", "#25b5e8", "#ff6b81", "#1f7a5c", "#6aa6ff", "#f2c94c"]
         )
-        risk_share.columns = ["Nivel", "Porcentaje"]
-        risk_share["Porcentaje"] = risk_share["Porcentaje"] * 100
-        fig_share = px.pie(
-            risk_share,
-            names="Nivel",
-            values="Porcentaje",
-            hole=0.6,
-            color="Nivel",
-            color_discrete_map={"Bajo": "#25b5e8", "Medio": "#16337b", "Alto": "#ff6b81"}
+        fig_compare.update_layout(
+            height=360,
+            xaxis=dict(title="Departamento", showgrid=False),
+            yaxis=dict(title="Riesgo (%)", range=[0, 60]),
+            showlegend=False
         )
-        fig_share.update_traces(
-            textinfo="percent+label",
-            hovertemplate="<b>%{label}</b><br>%{value:.1f}%<extra></extra>"
+        apply_plotly_style(fig_compare)
+        st.plotly_chart(fig_compare, use_container_width=True)
+
+    with chart_right:
+        radar_categories = ["Carga Laboral", "Estrés", "Satisfacción", "Balance Vida-Trabajo", "Apoyo Gerencial"]
+        radar_values = {
+            "Operaciones": [78, 72, 48, 40, 55],
+            "IT": [58, 50, 72, 68, 70],
+            "RRHH": [45, 38, 80, 75, 78],
+        }
+        radar_colors = {
+            "Operaciones": "#ff6b81",
+            "IT": "#25b5e8",
+            "RRHH": "#16337b",
+        }
+        fig_radar = go.Figure()
+        for dept, values in radar_values.items():
+            fig_radar.add_trace(go.Scatterpolar(
+                r=values,
+                theta=radar_categories,
+                fill="toself",
+                name=dept,
+                line=dict(color=radar_colors.get(dept, "#16337b")),
+                opacity=0.55
+            ))
+        fig_radar.update_layout(
+            height=360,
+            polar=dict(radialaxis=dict(visible=True, range=[0, 100])),
+            showlegend=True,
+            margin=dict(l=10, r=10, t=30, b=10)
         )
-        fig_share.update_layout(height=350, legend_title_text="Nivel de riesgo")
-        apply_plotly_style(fig_share)
-        st.plotly_chart(fig_share, use_container_width=True)
+        apply_plotly_style(fig_radar)
+        st.plotly_chart(fig_radar, use_container_width=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
