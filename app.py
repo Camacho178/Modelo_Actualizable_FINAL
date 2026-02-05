@@ -8,6 +8,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 import base64
 from pathlib import Path
+from textwrap import dedent
 
 # ============================================
 # CONFIGURACIÓN GENERAL
@@ -2062,38 +2063,36 @@ with tabs[2]:
         {"dept": "Finanzas", "avg": "4.2h", "max": "12h", "affected": 28, "risk": "Bajo"},
     ]
 
-    row_html = ""
-    for row in overtime_rows:
-        chip_class = "high" if row["risk"] == "Alto" else "med" if row["risk"] == "Medio" else "low"
-        row_html += f"""
-<tr>
-    <td>{row['dept']}</td>
-    <td>{row['avg']}</td>
-    <td>{row['max']}</td>
-    <td>{row['affected']}</td>
-    <td><span class='risk-chip {chip_class}'>{row['risk']}</span></td>
-</tr>
-        """
+    row_html = "\n".join([
+        f"<tr>"
+        f"<td>{row['dept']}</td>"
+        f"<td>{row['avg']}</td>"
+        f"<td>{row['max']}</td>"
+        f"<td>{row['affected']}</td>"
+        f"<td><span class='risk-chip {'high' if row['risk'] == 'Alto' else 'med' if row['risk'] == 'Medio' else 'low'}'>{row['risk']}</span></td>"
+        f"</tr>"
+        for row in overtime_rows
+    ])
 
-    table_html = f"""
-<div class='risk-panel risk-anim risk-delay-2'>
-    <div class='risk-panel-title'>Análisis de Horas Extra</div>
-    <table class='risk-table'>
-        <thead>
-            <tr>
-                <th>Departamento</th>
-                <th>Promedio Semanal</th>
-                <th>Máximo Registrado</th>
-                <th>Empleados Afectados</th>
-                <th>Nivel de Riesgo</th>
-            </tr>
-        </thead>
-        <tbody>
-            {row_html}
-        </tbody>
-    </table>
-</div>
-    """
+    table_html = dedent(f"""
+    <div class='risk-panel risk-anim risk-delay-2'>
+        <div class='risk-panel-title'>Análisis de Horas Extra</div>
+        <table class='risk-table'>
+            <thead>
+                <tr>
+                    <th>Departamento</th>
+                    <th>Promedio Semanal</th>
+                    <th>Máximo Registrado</th>
+                    <th>Empleados Afectados</th>
+                    <th>Nivel de Riesgo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {row_html}
+            </tbody>
+        </table>
+    </div>
+    """)
     st.markdown(table_html, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
