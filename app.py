@@ -508,6 +508,18 @@ st.markdown("""
         color: #16337b !important;
     }
 
+    .stMultiSelect [data-baseweb="tag"] {
+        background: #eaf0f6 !important;
+        color: #16337b !important;
+        border: 1px solid #d6e2ef !important;
+        box-shadow: none !important;
+    }
+
+    .stMultiSelect [data-baseweb="tag"] span,
+    .stMultiSelect [data-baseweb="tag"] svg {
+        color: #16337b !important;
+    }
+
     /* ALERTAS */
     .alert-box {
         background-color: #dbe3eb;
