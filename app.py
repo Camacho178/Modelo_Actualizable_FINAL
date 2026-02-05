@@ -420,6 +420,25 @@ st.markdown("""
         color: #7a8aa0;
     }
 
+    .employee-list-scroll {
+        max-height: 520px;
+        overflow-y: auto;
+        padding-right: 6px;
+    }
+
+    .employee-list-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .employee-list-scroll::-webkit-scrollbar-thumb {
+        background: #cbd6e6;
+        border-radius: 999px;
+    }
+
+    .employee-list-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
     .risk-pill {
         font-size: 11px;
         padding: 3px 8px;
@@ -1720,7 +1739,8 @@ with tabs[1]:
 
             selected_emp_id = int(st.session_state.selected_emp_id)
 
-            for row in list_df.head(10).itertuples(index=False):
+            st.markdown("<div class='employee-list-scroll'>", unsafe_allow_html=True)
+            for row in list_df.head(30).itertuples(index=False):
                 name_parts = row.employee_name.split()
                 initials = name_parts[0][0] + (name_parts[-1][0] if len(name_parts) > 1 else "")
                 presence_class = "inactive" if row.active_status == "Inactivo" else ""
@@ -1743,6 +1763,7 @@ with tabs[1]:
                 card_col.markdown(card_html, unsafe_allow_html=True)
                 if btn_col.button("Ver", key=f"emp_{row.employee_id}"):
                     st.session_state.selected_emp_id = int(row.employee_id)
+            st.markdown("</div>", unsafe_allow_html=True)
 
     with right:
         if df_emp.empty:
