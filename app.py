@@ -1881,6 +1881,7 @@ with tabs[2]:
         df_risk = df_risk[df_risk["risk_level"] == selected_risk]
 
     risk_score = float(df_risk["risk_score"].mean() * 100) if not df_risk.empty else 0
+    prob_burnout = float(df_risk["burnout"].mean() / 5 * 100) if not df_risk.empty else 0
     high_risk_pct = float((df_risk["risk_level"] == "Alto").mean() * 100) if not df_risk.empty else 0
     high_risk_count = int((df_risk["risk_level"] == "Alto").sum()) if not df_risk.empty else 0
     workload_avg = float(df_risk["workload"].mean()) if not df_risk.empty else 0
