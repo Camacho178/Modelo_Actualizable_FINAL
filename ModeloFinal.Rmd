@@ -1,0 +1,262 @@
+---
+title: "Modelo_Proyecto"
+author: "Arturo Camacho"
+date: "2026-01-30"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Segundo Intento del Modelo
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(caret)
+library(randomForest)
+
+# Cargar survey
+survey <- read_csv("survey.csv") %>% clean_names()
+
+# Cargar absenteeism (separado por ;)
+absent <- read_delim(
+  "Absenteeism_at_work.csv",
+  delim = ";",
+  col_names = TRUE
+) %>% clean_names()
+
+```
+```{r}
+# Limpieza profesional de gender
+survey <- survey %>%
+  mutate(
+    gender = str_to_lower(gender),
+    gender = case_when(
+      str_detect(gender, "male|man|cis male|cis-man|m\\b") ~ "male",
+      str_detect(gender, "female|woman|cis female|cis-woman|f\\b") ~ "female",
+      TRUE ~ "nonbinary"
+    ),
+    gender = as.factor(gender)
+  )
+
+# Crear variable objetivo (riesgo)
+survey <- survey %>%
+  mutate(
+    risk = case_when(
+      work_interfere %in% c("Often", "Sometimes") ~ 1,
+      TRUE ~ 0
+    )
+  )
+
+```
+
+```{r}
+# Crear ID artificial correctamente
+survey <- survey %>%
+  mutate(id = row_number()) %>%   # aquí sí se puede usar row_number()
+  select(
+    id,
+    risk,
+    gender,
+    family_history, benefits, anonymity, supervisor, coworkers,
+    mental_health_consequence, phys_health_consequence,
+    mental_vs_physical, leave,
+    age
+  )
+```
+
+```{r}
+absent <- absent %>%
+  select(
+    id,
+    reason_for_absence,
+    month_of_absence,
+    distance_from_residence_to_work,
+    service_time,
+    social_drinker,
+    social_smoker,
+    disciplinary_failure,
+    body_mass_index,
+    absenteeism_time_in_hours,
+    pet,
+    son,
+    age
+  )
+
+```
+
+```{r}
+min_rows <- min(nrow(survey), nrow(absent))
+
+survey <- survey %>% slice(1:min_rows)
+absent <- absent %>% slice(1:min_rows)
+
+combined <- left_join(survey, absent, by = "id")
+
+```
+
+```{r}
+predictoras <- combined %>%
+  select(
+    risk,
+    gender,
+    family_history, benefits, anonymity, supervisor, coworkers,
+    mental_health_consequence, phys_health_consequence,
+    mental_vs_physical, leave,
+    reason_for_absence, month_of_absence,
+    distance_from_residence_to_work, service_time,
+    social_drinker, social_smoker, disciplinary_failure,
+    body_mass_index, absenteeism_time_in_hours,
+    pet, son,
+    age.y
+  ) %>%
+  rename(age = age.y)
+
+```
+
+```{r}
+# ============================================================
+# 7. IMPUTACIÓN DEFINITIVA Y NORMALIZACIÓN
+# ============================================================
+
+# 1. Convertir categóricas a factor
+predictoras <- predictoras %>%
+  mutate(across(where(is.character), as.factor))
+
+# 2. Imputación para factores (moda)
+for (col in names(predictoras)) {
+  if (is.factor(predictoras[[col]])) {
+    moda <- names(sort(table(predictoras[[col]]), decreasing = TRUE))[1]
+    predictoras[[col]][is.na(predictoras[[col]])] <- moda
+  }
+}
+
+# 3. Imputación para numéricas (mediana)
+predictoras <- predictoras %>%
+  mutate(across(
+    where(is.numeric),
+    ~ ifelse(is.na(.), median(., na.rm = TRUE), .)
+  ))
+
+# 4. Normalización SOLO después de imputar
+predictoras <- predictoras %>%
+  mutate(across(
+    c(distance_from_residence_to_work, service_time,
+      body_mass_index, absenteeism_time_in_hours,
+      pet, son, age),
+    ~ scale(.) %>% as.numeric()
+  ))
+
+```
+
+```{r}
+dummies <- dummyVars(risk ~ ., data = predictoras)
+X <- predict(dummies, newdata = predictoras) %>% as.data.frame()
+y <- predictoras$risk
+
+set.seed(123)
+trainIndex <- createDataPartition(y, p = 0.7, list = FALSE)
+X_train <- X[trainIndex, ]
+X_test  <- X[-trainIndex, ]
+y_train <- y[trainIndex]
+y_test  <- y[-trainIndex]
+
+```
+
+```{r}
+# ============================================================
+# DIAGNÓSTICO DE NA
+# ============================================================
+
+colSums(is.na(X_train))
+
+```
+
+
+```{r}
+rf_model <- randomForest(
+  x = X_train,
+  y = as.factor(y_train),
+  ntree = 600,
+  mtry = floor(sqrt(ncol(X_train))),
+  importance = TRUE
+)
+
+```
+
+```{r}
+pred <- predict(rf_model, X_test)
+cm <- confusionMatrix(pred, as.factor(y_test))
+cm
+
+metricas <- tibble(
+  accuracy = cm$overall["Accuracy"],
+  sensitivity = cm$byClass["Sensitivity"],
+  specificity = cm$byClass["Specificity"],
+  precision = cm$byClass["Precision"],
+  recall = cm$byClass["Recall"],
+  f1 = cm$byClass["F1"]
+)
+
+metricas
+
+```
+
+```{r}
+varImpPlot(rf_model)
+importance(rf_model)
+```
+```{r}
+library(ggplot2)
+
+# Obtener importancia
+imp <- importance(rf_model)
+imp_df <- data.frame(
+  Variable = rownames(imp),
+  Importance = imp[, 1]
+)
+
+# Ordenar
+imp_df <- imp_df %>% arrange(desc(Importance))
+
+# Plot
+ggplot(imp_df[1:20, ], aes(x = reorder(Variable, Importance), y = Importance)) +
+  geom_col(fill = "#2E86C1") +
+  coord_flip() +
+  labs(
+    title = "Top 20 Variables Más Importantes",
+    x = "Variable",
+    y = "Importancia (MeanDecreaseGini)"
+  ) +
+  theme_minimal(base_size = 14)
+
+```
+```{r}
+library(dplyr)
+
+tabla_importancia <- imp_df %>%
+  arrange(desc(Importance)) %>%
+  head(20)
+
+tabla_importancia
+
+```
+
+```{r}
+library(caret)
+library(ggplot2)
+
+cm_table <- as.data.frame(cm$table)
+
+ggplot(cm_table, aes(Prediction, Reference, fill = Freq)) +
+  geom_tile() +
+  geom_text(aes(label = Freq), color = "white", size = 6) +
+  scale_fill_gradient(low = "#3498DB", high = "#1B4F72") +
+  labs(title = "Matriz de Confusión") +
+  theme_minimal(base_size = 14)
+
+```

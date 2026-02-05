@@ -1,0 +1,1580 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Modelo\_Proyecto},
+  pdfauthor={Arturo Camacho},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Modelo\_Proyecto}
+\author{Arturo Camacho}
+\date{2026-01-30}
+
+\begin{document}
+\maketitle
+
+\subsection{Primer intento del
+proyecto}\label{primer-intento-del-proyecto}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ============================================================}
+\CommentTok{\#   MODELO DE RIESGO DE SALUD MENTAL COMBINANDO DOS DATASETS}
+\CommentTok{\# ============================================================}
+
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+## v dplyr     1.1.4     v readr     2.1.5
+## v forcats   1.0.1     v stringr   1.5.2
+## v ggplot2   4.0.0     v tibble    3.3.0
+## v lubridate 1.9.4     v tidyr     1.3.1
+## v purrr     1.1.0     
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(janitor)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Adjuntando el paquete: 'janitor'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     chisq.test, fisher.test
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(caret)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'caret' was built under R version 4.5.2
+\end{verbatim}
+
+\begin{verbatim}
+## Cargando paquete requerido: lattice
+## 
+## Adjuntando el paquete: 'caret'
+## 
+## The following object is masked from 'package:purrr':
+## 
+##     lift
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(randomForest)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'randomForest' was built under R version 4.5.2
+\end{verbatim}
+
+\begin{verbatim}
+## randomForest 4.7-1.2
+## Type rfNews() to see new features/changes/bug fixes.
+## 
+## Adjuntando el paquete: 'randomForest'
+## 
+## The following object is masked from 'package:dplyr':
+## 
+##     combine
+## 
+## The following object is masked from 'package:ggplot2':
+## 
+##     margin
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ============================================================}
+\CommentTok{\# 1. CARGA CORRECTA DE LOS DATASETS}
+\CommentTok{\# ============================================================}
+
+\CommentTok{\# Survey (separado por comas)}
+\NormalTok{survey }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"survey.csv"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{clean\_names}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 1259 Columns: 27
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (25): Gender, Country, state, self_employed, family_history, treatment,...
+## dbl   (1): Age
+## dttm  (1): Timestamp
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Absenteeism (separado por punto y coma)}
+\NormalTok{absent }\OtherTok{\textless{}{-}} \FunctionTok{read\_delim}\NormalTok{(}
+  \StringTok{"Absenteeism\_at\_work.csv"}\NormalTok{,}
+  \AttributeTok{delim =} \StringTok{";"}\NormalTok{,}
+  \AttributeTok{col\_names =} \ConstantTok{TRUE}
+\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{clean\_names}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 740 Columns: 21
+## -- Column specification --------------------------------------------------------
+## Delimiter: ";"
+## dbl (21): ID, Reason for absence, Month of absence, Day of the week, Seasons...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ============================================================}
+\CommentTok{\# 2. CREAR VARIABLE OBJETIVO (RIESGO)}
+\CommentTok{\# ============================================================}
+
+\NormalTok{survey }\OtherTok{\textless{}{-}}\NormalTok{ survey }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{risk =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      work\_interfere }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Often"}\NormalTok{, }\StringTok{"Sometimes"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{,}
+      \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \DecValTok{0}
+\NormalTok{    )}
+\NormalTok{  )}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 3. CREAR ID ARTIFICIAL PARA COMBINAR}
+\CommentTok{\# ============================================================}
+
+\NormalTok{min\_rows }\OtherTok{\textless{}{-}} \FunctionTok{min}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(survey), }\FunctionTok{nrow}\NormalTok{(absent))}
+
+\NormalTok{survey }\OtherTok{\textless{}{-}}\NormalTok{ survey }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{min\_rows) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{id =} \DecValTok{1}\SpecialCharTok{:}\NormalTok{min\_rows)}
+\NormalTok{absent }\OtherTok{\textless{}{-}}\NormalTok{ absent }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{min\_rows) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{id =} \DecValTok{1}\SpecialCharTok{:}\NormalTok{min\_rows)}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 4. COMBINAR DATASETS}
+\CommentTok{\# ============================================================}
+
+\NormalTok{combined }\OtherTok{\textless{}{-}} \FunctionTok{left\_join}\NormalTok{(survey, absent, }\AttributeTok{by =} \StringTok{"id"}\NormalTok{)}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 5. SELECCIÓN DE VARIABLES PREDICTORAS}
+\CommentTok{\# ============================================================}
+
+\NormalTok{predictoras }\OtherTok{\textless{}{-}}\NormalTok{ combined }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    risk,}
+    \CommentTok{\# Variables psicológicas}
+\NormalTok{    family\_history, benefits, anonymity, supervisor, coworkers,}
+\NormalTok{    mental\_health\_consequence, phys\_health\_consequence,}
+\NormalTok{    mental\_vs\_physical, leave,}
+
+    \CommentTok{\# Variables de ausentismo}
+\NormalTok{    absenteeism\_time\_in\_hours, distance\_from\_residence\_to\_work,}
+\NormalTok{    service\_time, social\_drinker, social\_smoker, disciplinary\_failure,}
+\NormalTok{    body\_mass\_index, reason\_for\_absence, month\_of\_absence,}
+
+    \CommentTok{\# Demográficas}
+\NormalTok{    age.y}
+\NormalTok{  )}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 6. LIMPIEZA Y TRANSFORMACIÓN}
+\CommentTok{\# ============================================================}
+
+\CommentTok{\# Convertir categóricas a factor}
+\NormalTok{predictoras }\OtherTok{\textless{}{-}}\NormalTok{ predictoras }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), as.factor))}
+
+\CommentTok{\# Imputación simple}
+\ControlFlowTok{for}\NormalTok{ (col }\ControlFlowTok{in} \FunctionTok{names}\NormalTok{(predictoras)) \{}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.factor}\NormalTok{(predictoras[[col]])) \{}
+\NormalTok{    moda }\OtherTok{\textless{}{-}} \FunctionTok{names}\NormalTok{(}\FunctionTok{sort}\NormalTok{(}\FunctionTok{table}\NormalTok{(predictoras[[col]]), }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{))[}\DecValTok{1}\NormalTok{]}
+\NormalTok{    predictoras[[col]][}\FunctionTok{is.na}\NormalTok{(predictoras[[col]])] }\OtherTok{\textless{}{-}}\NormalTok{ moda}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\NormalTok{predictoras}\SpecialCharTok{$}\NormalTok{age[}\FunctionTok{is.na}\NormalTok{(predictoras}\SpecialCharTok{$}\NormalTok{age)] }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(predictoras}\SpecialCharTok{$}\NormalTok{age, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Unknown or uninitialised column: `age`.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Unknown or uninitialised column: `age`.
+## Unknown or uninitialised column: `age`.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ============================================================}
+\CommentTok{\# 7. CODIFICACIÓN ONE{-}HOT}
+\CommentTok{\# ============================================================}
+
+\NormalTok{dummies }\OtherTok{\textless{}{-}} \FunctionTok{dummyVars}\NormalTok{(risk }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ., }\AttributeTok{data =}\NormalTok{ predictoras)}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(dummies, }\AttributeTok{newdata =}\NormalTok{ predictoras) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as.data.frame}\NormalTok{()}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ predictoras}\SpecialCharTok{$}\NormalTok{risk}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 8. DIVISIÓN TRAIN / }\AlertTok{TEST}
+\CommentTok{\# ============================================================}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{trainIndex }\OtherTok{\textless{}{-}} \FunctionTok{createDataPartition}\NormalTok{(y, }\AttributeTok{p =} \FloatTok{0.7}\NormalTok{, }\AttributeTok{list =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{X\_train }\OtherTok{\textless{}{-}}\NormalTok{ X[trainIndex, ]}
+\NormalTok{X\_test  }\OtherTok{\textless{}{-}}\NormalTok{ X[}\SpecialCharTok{{-}}\NormalTok{trainIndex, ]}
+\NormalTok{y\_train }\OtherTok{\textless{}{-}}\NormalTok{ y[trainIndex]}
+\NormalTok{y\_test  }\OtherTok{\textless{}{-}}\NormalTok{ y[}\SpecialCharTok{{-}}\NormalTok{trainIndex]}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 9. ENTRENAR MODELO RANDOM FOREST}
+\CommentTok{\# ============================================================}
+
+\NormalTok{rf\_model }\OtherTok{\textless{}{-}} \FunctionTok{randomForest}\NormalTok{(}
+  \AttributeTok{x =}\NormalTok{ X\_train,}
+  \AttributeTok{y =} \FunctionTok{as.factor}\NormalTok{(y\_train),}
+  \AttributeTok{ntree =} \DecValTok{300}\NormalTok{,}
+  \AttributeTok{importance =} \ConstantTok{TRUE}
+\NormalTok{)}
+
+\CommentTok{\# ============================================================}
+\CommentTok{\# 10. EVALUACIÓN DEL MODELO}
+\CommentTok{\# ============================================================}
+
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(rf\_model, X\_test)}
+\FunctionTok{confusionMatrix}\NormalTok{(pred, }\FunctionTok{as.factor}\NormalTok{(y\_test))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction  0  1
+##          0 84 41
+##          1 31 66
+##                                           
+##                Accuracy : 0.6757          
+##                  95% CI : (0.6098, 0.7368)
+##     No Information Rate : 0.518           
+##     P-Value [Acc > NIR] : 1.376e-06       
+##                                           
+##                   Kappa : 0.3484          
+##                                           
+##  Mcnemar's Test P-Value : 0.2888          
+##                                           
+##             Sensitivity : 0.7304          
+##             Specificity : 0.6168          
+##          Pos Pred Value : 0.6720          
+##          Neg Pred Value : 0.6804          
+##              Prevalence : 0.5180          
+##          Detection Rate : 0.3784          
+##    Detection Prevalence : 0.5631          
+##       Balanced Accuracy : 0.6736          
+##                                           
+##        'Positive' Class : 0               
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ============================================================}
+\CommentTok{\# 11. IMPORTANCIA DE VARIABLES (KPIs)}
+\CommentTok{\# ============================================================}
+
+\FunctionTok{varImpPlot}\NormalTok{(rf\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{ModeloFinal_files/figure-latex/unnamed-chunk-1-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{importance}\NormalTok{(rf\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                            0           1 MeanDecreaseAccuracy
+## family_history.No                6.019296151  4.06286608           6.66924477
+## family_history.Yes               5.949033651  3.33671921           6.48097062
+## benefits.Don't know             -0.289928228 -0.82975839          -0.66710891
+## benefits.No                      4.079417041 -0.01761710           3.06335781
+## benefits.Yes                     2.553628717 -0.47842428           1.86324978
+## anonymity.Don't know             1.478023180  1.33054802           2.12071313
+## anonymity.No                    -2.018588136  0.69824441          -0.73706741
+## anonymity.Yes                   -0.122085892  1.48403974           0.91132055
+## supervisor.No                   -0.503243958 -3.26339173          -2.63370767
+## supervisor.Some of them         -0.006833788 -1.66835871          -1.18558238
+## supervisor.Yes                   1.750875241 -5.19382744          -1.80603646
+## coworkers.No                     1.126358571 -3.39932800          -1.53378224
+## coworkers.Some of them          -0.996369141 -2.43487439          -2.18959367
+## coworkers.Yes                   -1.967442743  0.41743865          -1.32379912
+## mental_health_consequence.Maybe  1.531191714  0.27315446           1.41040288
+## mental_health_consequence.No     5.180213926 -2.77807340           3.07721214
+## mental_health_consequence.Yes    0.362440655  0.72070958           0.76407661
+## phys_health_consequence.Maybe    0.252881920 -0.09748453           0.12554993
+## phys_health_consequence.No      -0.201793645 -1.25097008          -0.87796748
+## phys_health_consequence.Yes      3.160504296  3.32962341           4.11154410
+## mental_vs_physical.Don't know    2.224138213  3.09695743           3.66789460
+## mental_vs_physical.No            2.419965209  1.58532854           2.95004871
+## mental_vs_physical.Yes           2.985047876 -1.73999185           1.09368286
+## leave.Don't know                 0.145765302  2.16108525           1.46978314
+## leave.Somewhat difficult         4.449315487 -0.45657311           2.72951030
+## leave.Somewhat easy             -0.267906619 -1.35790968          -1.01062370
+## leave.Very difficult             3.830668174  6.07382059           6.85574741
+## leave.Very easy                  1.835699359 -1.79316469           0.05662196
+## absenteeism_time_in_hours       -1.012925478 -1.33586491          -1.62579282
+## distance_from_residence_to_work  3.357988592  0.52399458           3.03494647
+## service_time                     3.443732814 -0.63839025           2.39489676
+## social_drinker                   3.121935172 -1.77204080           1.30294245
+## social_smoker                   -2.963150162  0.53027053          -2.28289238
+## disciplinary_failure             1.228859942  0.84048074           1.43884320
+## body_mass_index                 -0.649066638  0.07467657          -0.49081614
+## reason_for_absence              -4.583115174 -0.42226667          -3.69507964
+## month_of_absence                 3.476095276 -0.20579126           2.41775379
+## age.y                           -0.798974912 -4.42809036          -3.39164864
+##                                 MeanDecreaseGini
+## family_history.No                       8.696583
+## family_history.Yes                      8.160438
+## benefits.Don't know                     4.998129
+## benefits.No                             4.753393
+## benefits.Yes                            4.994814
+## anonymity.Don't know                    4.973531
+## anonymity.No                            1.482109
+## anonymity.Yes                           4.197358
+## supervisor.No                           3.624904
+## supervisor.Some of them                 4.184087
+## supervisor.Yes                          4.432824
+## coworkers.No                            3.185757
+## coworkers.Some of them                  4.698673
+## coworkers.Yes                           3.567315
+## mental_health_consequence.Maybe         5.016269
+## mental_health_consequence.No            4.644955
+## mental_health_consequence.Yes           4.222681
+## phys_health_consequence.Maybe           3.172421
+## phys_health_consequence.No              3.353583
+## phys_health_consequence.Yes             2.455543
+## mental_vs_physical.Don't know           5.979049
+## mental_vs_physical.No                   5.079622
+## mental_vs_physical.Yes                  3.840446
+## leave.Don't know                        5.666819
+## leave.Somewhat difficult                3.770126
+## leave.Somewhat easy                     3.801121
+## leave.Very difficult                    3.670412
+## leave.Very easy                         3.528954
+## absenteeism_time_in_hours              16.633883
+## distance_from_residence_to_work        16.035580
+## service_time                           14.325050
+## social_drinker                          4.180914
+## social_smoker                           1.935921
+## disciplinary_failure                    1.651011
+## body_mass_index                        13.483526
+## reason_for_absence                     17.645785
+## month_of_absence                       21.855071
+## age.y                                  14.760704
+\end{verbatim}
+
+\section{Segundo Intento del Modelo}\label{segundo-intento-del-modelo}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(janitor)}
+\FunctionTok{library}\NormalTok{(caret)}
+\FunctionTok{library}\NormalTok{(randomForest)}
+
+\CommentTok{\# Cargar survey}
+\NormalTok{survey }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"survey.csv"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{clean\_names}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 1259 Columns: 27
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (25): Gender, Country, state, self_employed, family_history, treatment,...
+## dbl   (1): Age
+## dttm  (1): Timestamp
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Cargar absenteeism (separado por ;)}
+\NormalTok{absent }\OtherTok{\textless{}{-}} \FunctionTok{read\_delim}\NormalTok{(}
+  \StringTok{"Absenteeism\_at\_work.csv"}\NormalTok{,}
+  \AttributeTok{delim =} \StringTok{";"}\NormalTok{,}
+  \AttributeTok{col\_names =} \ConstantTok{TRUE}
+\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{clean\_names}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 740 Columns: 21
+## -- Column specification --------------------------------------------------------
+## Delimiter: ";"
+## dbl (21): ID, Reason for absence, Month of absence, Day of the week, Seasons...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Limpieza profesional de gender}
+\NormalTok{survey }\OtherTok{\textless{}{-}}\NormalTok{ survey }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{gender =} \FunctionTok{str\_to\_lower}\NormalTok{(gender),}
+    \AttributeTok{gender =} \FunctionTok{case\_when}\NormalTok{(}
+      \FunctionTok{str\_detect}\NormalTok{(gender, }\StringTok{"male|man|cis male|cis{-}man|m}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{b"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{"male"}\NormalTok{,}
+      \FunctionTok{str\_detect}\NormalTok{(gender, }\StringTok{"female|woman|cis female|cis{-}woman|f}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{b"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{"female"}\NormalTok{,}
+      \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \StringTok{"nonbinary"}
+\NormalTok{    ),}
+    \AttributeTok{gender =} \FunctionTok{as.factor}\NormalTok{(gender)}
+\NormalTok{  )}
+
+\CommentTok{\# Crear variable objetivo (riesgo)}
+\NormalTok{survey }\OtherTok{\textless{}{-}}\NormalTok{ survey }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{risk =} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{      work\_interfere }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Often"}\NormalTok{, }\StringTok{"Sometimes"}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{,}
+      \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \DecValTok{0}
+\NormalTok{    )}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Crear ID artificial correctamente}
+\NormalTok{survey }\OtherTok{\textless{}{-}}\NormalTok{ survey }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{id =} \FunctionTok{row\_number}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}   \CommentTok{\# aquí sí se puede usar row\_number()}
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    id,}
+\NormalTok{    risk,}
+\NormalTok{    gender,}
+\NormalTok{    family\_history, benefits, anonymity, supervisor, coworkers,}
+\NormalTok{    mental\_health\_consequence, phys\_health\_consequence,}
+\NormalTok{    mental\_vs\_physical, leave,}
+\NormalTok{    age}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{absent }\OtherTok{\textless{}{-}}\NormalTok{ absent }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    id,}
+\NormalTok{    reason\_for\_absence,}
+\NormalTok{    month\_of\_absence,}
+\NormalTok{    distance\_from\_residence\_to\_work,}
+\NormalTok{    service\_time,}
+\NormalTok{    social\_drinker,}
+\NormalTok{    social\_smoker,}
+\NormalTok{    disciplinary\_failure,}
+\NormalTok{    body\_mass\_index,}
+\NormalTok{    absenteeism\_time\_in\_hours,}
+\NormalTok{    pet,}
+\NormalTok{    son,}
+\NormalTok{    age}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{min\_rows }\OtherTok{\textless{}{-}} \FunctionTok{min}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(survey), }\FunctionTok{nrow}\NormalTok{(absent))}
+
+\NormalTok{survey }\OtherTok{\textless{}{-}}\NormalTok{ survey }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{min\_rows)}
+\NormalTok{absent }\OtherTok{\textless{}{-}}\NormalTok{ absent }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{min\_rows)}
+
+\NormalTok{combined }\OtherTok{\textless{}{-}} \FunctionTok{left\_join}\NormalTok{(survey, absent, }\AttributeTok{by =} \StringTok{"id"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{predictoras }\OtherTok{\textless{}{-}}\NormalTok{ combined }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}
+\NormalTok{    risk,}
+\NormalTok{    gender,}
+\NormalTok{    family\_history, benefits, anonymity, supervisor, coworkers,}
+\NormalTok{    mental\_health\_consequence, phys\_health\_consequence,}
+\NormalTok{    mental\_vs\_physical, leave,}
+\NormalTok{    reason\_for\_absence, month\_of\_absence,}
+\NormalTok{    distance\_from\_residence\_to\_work, service\_time,}
+\NormalTok{    social\_drinker, social\_smoker, disciplinary\_failure,}
+\NormalTok{    body\_mass\_index, absenteeism\_time\_in\_hours,}
+\NormalTok{    pet, son,}
+\NormalTok{    age.y}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{age =}\NormalTok{ age.y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ============================================================}
+\CommentTok{\# 7. IMPUTACIÓN DEFINITIVA Y NORMALIZACIÓN}
+\CommentTok{\# ============================================================}
+
+\CommentTok{\# 1. Convertir categóricas a factor}
+\NormalTok{predictoras }\OtherTok{\textless{}{-}}\NormalTok{ predictoras }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.character), as.factor))}
+
+\CommentTok{\# 2. Imputación para factores (moda)}
+\ControlFlowTok{for}\NormalTok{ (col }\ControlFlowTok{in} \FunctionTok{names}\NormalTok{(predictoras)) \{}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.factor}\NormalTok{(predictoras[[col]])) \{}
+\NormalTok{    moda }\OtherTok{\textless{}{-}} \FunctionTok{names}\NormalTok{(}\FunctionTok{sort}\NormalTok{(}\FunctionTok{table}\NormalTok{(predictoras[[col]]), }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{))[}\DecValTok{1}\NormalTok{]}
+\NormalTok{    predictoras[[col]][}\FunctionTok{is.na}\NormalTok{(predictoras[[col]])] }\OtherTok{\textless{}{-}}\NormalTok{ moda}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\CommentTok{\# 3. Imputación para numéricas (mediana)}
+\NormalTok{predictoras }\OtherTok{\textless{}{-}}\NormalTok{ predictoras }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}
+    \FunctionTok{where}\NormalTok{(is.numeric),}
+    \SpecialCharTok{\textasciitilde{}} \FunctionTok{ifelse}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(.), }\FunctionTok{median}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), .)}
+\NormalTok{  ))}
+
+\CommentTok{\# 4. Normalización SOLO después de imputar}
+\NormalTok{predictoras }\OtherTok{\textless{}{-}}\NormalTok{ predictoras }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(distance\_from\_residence\_to\_work, service\_time,}
+\NormalTok{      body\_mass\_index, absenteeism\_time\_in\_hours,}
+\NormalTok{      pet, son, age),}
+    \SpecialCharTok{\textasciitilde{}} \FunctionTok{scale}\NormalTok{(.) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as.numeric}\NormalTok{()}
+\NormalTok{  ))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dummies }\OtherTok{\textless{}{-}} \FunctionTok{dummyVars}\NormalTok{(risk }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ., }\AttributeTok{data =}\NormalTok{ predictoras)}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(dummies, }\AttributeTok{newdata =}\NormalTok{ predictoras) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as.data.frame}\NormalTok{()}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ predictoras}\SpecialCharTok{$}\NormalTok{risk}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{trainIndex }\OtherTok{\textless{}{-}} \FunctionTok{createDataPartition}\NormalTok{(y, }\AttributeTok{p =} \FloatTok{0.7}\NormalTok{, }\AttributeTok{list =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{X\_train }\OtherTok{\textless{}{-}}\NormalTok{ X[trainIndex, ]}
+\NormalTok{X\_test  }\OtherTok{\textless{}{-}}\NormalTok{ X[}\SpecialCharTok{{-}}\NormalTok{trainIndex, ]}
+\NormalTok{y\_train }\OtherTok{\textless{}{-}}\NormalTok{ y[trainIndex]}
+\NormalTok{y\_test  }\OtherTok{\textless{}{-}}\NormalTok{ y[}\SpecialCharTok{{-}}\NormalTok{trainIndex]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ============================================================}
+\CommentTok{\# DIAGNÓSTICO DE NA}
+\CommentTok{\# ============================================================}
+
+\FunctionTok{colSums}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(X\_train))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   gender.female                     gender.male 
+##                               0                               0 
+##                gender.nonbinary               family_history.No 
+##                               0                               0 
+##              family_history.Yes             benefits.Don't know 
+##                               0                               0 
+##                     benefits.No                    benefits.Yes 
+##                               0                               0 
+##            anonymity.Don't know                    anonymity.No 
+##                               0                               0 
+##                   anonymity.Yes                   supervisor.No 
+##                               0                               0 
+##         supervisor.Some of them                  supervisor.Yes 
+##                               0                               0 
+##                    coworkers.No          coworkers.Some of them 
+##                               0                               0 
+##                   coworkers.Yes mental_health_consequence.Maybe 
+##                               0                               0 
+##    mental_health_consequence.No   mental_health_consequence.Yes 
+##                               0                               0 
+##   phys_health_consequence.Maybe      phys_health_consequence.No 
+##                               0                               0 
+##     phys_health_consequence.Yes   mental_vs_physical.Don't know 
+##                               0                               0 
+##           mental_vs_physical.No          mental_vs_physical.Yes 
+##                               0                               0 
+##                leave.Don't know        leave.Somewhat difficult 
+##                               0                               0 
+##             leave.Somewhat easy            leave.Very difficult 
+##                               0                               0 
+##                 leave.Very easy              reason_for_absence 
+##                               0                               0 
+##                month_of_absence distance_from_residence_to_work 
+##                               0                               0 
+##                    service_time                  social_drinker 
+##                               0                               0 
+##                   social_smoker            disciplinary_failure 
+##                               0                               0 
+##                 body_mass_index       absenteeism_time_in_hours 
+##                               0                               0 
+##                             pet                             son 
+##                               0                               0 
+##                             age 
+##                               0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rf\_model }\OtherTok{\textless{}{-}} \FunctionTok{randomForest}\NormalTok{(}
+  \AttributeTok{x =}\NormalTok{ X\_train,}
+  \AttributeTok{y =} \FunctionTok{as.factor}\NormalTok{(y\_train),}
+  \AttributeTok{ntree =} \DecValTok{600}\NormalTok{,}
+  \AttributeTok{mtry =} \FunctionTok{floor}\NormalTok{(}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{ncol}\NormalTok{(X\_train))),}
+  \AttributeTok{importance =} \ConstantTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(rf\_model, X\_test)}
+\NormalTok{cm }\OtherTok{\textless{}{-}} \FunctionTok{confusionMatrix}\NormalTok{(pred, }\FunctionTok{as.factor}\NormalTok{(y\_test))}
+\NormalTok{cm}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   0   1
+##          0 230  66
+##          1  30 107
+##                                           
+##                Accuracy : 0.7783          
+##                  95% CI : (0.7362, 0.8166)
+##     No Information Rate : 0.6005          
+##     P-Value [Acc > NIR] : 3.102e-15       
+##                                           
+##                   Kappa : 0.5213          
+##                                           
+##  Mcnemar's Test P-Value : 0.000354        
+##                                           
+##             Sensitivity : 0.8846          
+##             Specificity : 0.6185          
+##          Pos Pred Value : 0.7770          
+##          Neg Pred Value : 0.7810          
+##              Prevalence : 0.6005          
+##          Detection Rate : 0.5312          
+##    Detection Prevalence : 0.6836          
+##       Balanced Accuracy : 0.7516          
+##                                           
+##        'Positive' Class : 0               
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{metricas }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{accuracy =}\NormalTok{ cm}\SpecialCharTok{$}\NormalTok{overall[}\StringTok{"Accuracy"}\NormalTok{],}
+  \AttributeTok{sensitivity =}\NormalTok{ cm}\SpecialCharTok{$}\NormalTok{byClass[}\StringTok{"Sensitivity"}\NormalTok{],}
+  \AttributeTok{specificity =}\NormalTok{ cm}\SpecialCharTok{$}\NormalTok{byClass[}\StringTok{"Specificity"}\NormalTok{],}
+  \AttributeTok{precision =}\NormalTok{ cm}\SpecialCharTok{$}\NormalTok{byClass[}\StringTok{"Precision"}\NormalTok{],}
+  \AttributeTok{recall =}\NormalTok{ cm}\SpecialCharTok{$}\NormalTok{byClass[}\StringTok{"Recall"}\NormalTok{],}
+  \AttributeTok{f1 =}\NormalTok{ cm}\SpecialCharTok{$}\NormalTok{byClass[}\StringTok{"F1"}\NormalTok{]}
+\NormalTok{)}
+
+\NormalTok{metricas}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 6
+##   accuracy sensitivity specificity precision recall    f1
+##      <dbl>       <dbl>       <dbl>     <dbl>  <dbl> <dbl>
+## 1    0.778       0.885       0.618     0.777  0.885 0.827
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{varImpPlot}\NormalTok{(rf\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{ModeloFinal_files/figure-latex/unnamed-chunk-13-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{importance}\NormalTok{(rf\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                         0          1 MeanDecreaseAccuracy
+## gender.female                    4.530564  5.1593224           6.44268305
+## gender.male                      8.477285  7.2123990          10.36107831
+## gender.nonbinary                 1.831966 -1.7320901          -0.01398113
+## family_history.No               16.644717 15.3752276          18.36708252
+## family_history.Yes              16.134144 15.4959123          17.99114448
+## benefits.Don't know             11.176606  2.7450575          10.12891883
+## benefits.No                      7.947762  6.8568211           9.03025780
+## benefits.Yes                    11.404686  8.9886295          11.99766398
+## anonymity.Don't know            12.496204 10.3803153          13.50352772
+## anonymity.No                     0.408588  2.3620290           2.19639269
+## anonymity.Yes                   10.456398  3.8478059           9.61834803
+## supervisor.No                    8.157145 -1.2154775           6.27928954
+## supervisor.Some of them         10.035369  3.6150127           9.53671320
+## supervisor.Yes                  10.387993  4.3208858          10.44897904
+## coworkers.No                     3.403638  1.9493088           3.83077456
+## coworkers.Some of them          10.783506 10.1827510          11.69211919
+## coworkers.Yes                   10.928174  8.6634076          11.33105184
+## mental_health_consequence.Maybe 10.208355  8.3066757          10.69799244
+## mental_health_consequence.No    19.924532 16.0317549          21.25032406
+## mental_health_consequence.Yes    6.278494  9.5618306           9.89927189
+## phys_health_consequence.Maybe    4.732769 -2.6828432           2.18582310
+## phys_health_consequence.No       6.839304 -2.6173822           4.44686265
+## phys_health_consequence.Yes      5.674073  3.9398288           6.29243781
+## mental_vs_physical.Don't know    7.395002  5.8439795           8.38453306
+## mental_vs_physical.No           10.074183 13.0793485          14.07651954
+## mental_vs_physical.Yes           9.632156  5.1972636           9.83622840
+## leave.Don't know                15.898478 10.5151923          16.78651865
+## leave.Somewhat difficult        12.710014  1.7186352          12.67066055
+## leave.Somewhat easy              2.375696  3.2262519           3.56902563
+## leave.Very difficult             4.951809  8.7392048           9.72458384
+## leave.Very easy                  9.382742  3.4434304           8.07701072
+## reason_for_absence               1.688187  4.2254618           5.71616533
+## month_of_absence                 3.281581 -0.9306166           2.68309412
+## distance_from_residence_to_work 23.620270 19.4019156          26.04438496
+## service_time                    22.475484 19.3598016          25.07548459
+## social_drinker                  11.374805 11.1927080          14.25917972
+## social_smoker                    8.192077  9.3331908          10.53235653
+## disciplinary_failure             2.865266 -2.3928685           0.44191968
+## body_mass_index                 21.079285 19.0491289          23.72565053
+## absenteeism_time_in_hours        3.081859  2.2836148           4.90858996
+## pet                             14.359471 15.3042100          17.65746223
+## son                             18.941599 17.6798319          20.74631610
+## age                             21.014824 17.8709906          23.41377458
+##                                 MeanDecreaseGini
+## gender.female                           3.325145
+## gender.male                             5.185991
+## gender.nonbinary                        1.391392
+## family_history.No                      15.310924
+## family_history.Yes                     15.290003
+## benefits.Don't know                     6.876282
+## benefits.No                             7.431069
+## benefits.Yes                           10.172130
+## anonymity.Don't know                   10.469059
+## anonymity.No                            2.382246
+## anonymity.Yes                           6.689565
+## supervisor.No                           5.539580
+## supervisor.Some of them                 7.068121
+## supervisor.Yes                          7.225160
+## coworkers.No                            5.266410
+## coworkers.Some of them                 10.068294
+## coworkers.Yes                           7.859204
+## mental_health_consequence.Maybe         8.545483
+## mental_health_consequence.No           25.771546
+## mental_health_consequence.Yes           7.387605
+## phys_health_consequence.Maybe           4.780339
+## phys_health_consequence.No              5.814788
+## phys_health_consequence.Yes             3.309244
+## mental_vs_physical.Don't know           7.708926
+## mental_vs_physical.No                  10.566163
+## mental_vs_physical.Yes                  6.966137
+## leave.Don't know                       13.041848
+## leave.Somewhat difficult                5.840741
+## leave.Somewhat easy                     5.705039
+## leave.Very difficult                    5.883753
+## leave.Very easy                         5.873235
+## reason_for_absence                      3.985620
+## month_of_absence                        3.116818
+## distance_from_residence_to_work        29.922063
+## service_time                           24.217771
+## social_drinker                          6.881576
+## social_smoker                           2.960804
+## disciplinary_failure                    0.208078
+## body_mass_index                        22.762686
+## absenteeism_time_in_hours               3.720002
+## pet                                     9.810564
+## son                                    17.761998
+## age                                    21.783498
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+
+\CommentTok{\# Obtener importancia}
+\NormalTok{imp }\OtherTok{\textless{}{-}} \FunctionTok{importance}\NormalTok{(rf\_model)}
+\NormalTok{imp\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Variable =} \FunctionTok{rownames}\NormalTok{(imp),}
+  \AttributeTok{Importance =}\NormalTok{ imp[, }\DecValTok{1}\NormalTok{]}
+\NormalTok{)}
+
+\CommentTok{\# Ordenar}
+\NormalTok{imp\_df }\OtherTok{\textless{}{-}}\NormalTok{ imp\_df }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(Importance))}
+
+\CommentTok{\# Plot}
+\FunctionTok{ggplot}\NormalTok{(imp\_df[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{20}\NormalTok{, ], }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(Variable, Importance), }\AttributeTok{y =}\NormalTok{ Importance)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{fill =} \StringTok{"\#2E86C1"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Top 20 Variables Más Importantes"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Variable"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Importancia (MeanDecreaseGini)"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{ModeloFinal_files/figure-latex/unnamed-chunk-14-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+
+\NormalTok{tabla\_importancia }\OtherTok{\textless{}{-}}\NormalTok{ imp\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(Importance)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{head}\NormalTok{(}\DecValTok{20}\NormalTok{)}
+
+\NormalTok{tabla\_importancia}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                        Variable Importance
+## distance_from_residence_to_work distance_from_residence_to_work   23.62027
+## service_time                                       service_time   22.47548
+## body_mass_index                                 body_mass_index   21.07929
+## age                                                         age   21.01482
+## mental_health_consequence.No       mental_health_consequence.No   19.92453
+## son                                                         son   18.94160
+## family_history.No                             family_history.No   16.64472
+## family_history.Yes                           family_history.Yes   16.13414
+## leave.Don't know                               leave.Don't know   15.89848
+## pet                                                         pet   14.35947
+## leave.Somewhat difficult               leave.Somewhat difficult   12.71001
+## anonymity.Don't know                       anonymity.Don't know   12.49620
+## benefits.Yes                                       benefits.Yes   11.40469
+## social_drinker                                   social_drinker   11.37480
+## benefits.Don't know                         benefits.Don't know   11.17661
+## coworkers.Yes                                     coworkers.Yes   10.92817
+## coworkers.Some of them                   coworkers.Some of them   10.78351
+## anonymity.Yes                                     anonymity.Yes   10.45640
+## supervisor.Yes                                   supervisor.Yes   10.38799
+## mental_health_consequence.Maybe mental_health_consequence.Maybe   10.20835
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(caret)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+
+\NormalTok{cm\_table }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(cm}\SpecialCharTok{$}\NormalTok{table)}
+
+\FunctionTok{ggplot}\NormalTok{(cm\_table, }\FunctionTok{aes}\NormalTok{(Prediction, Reference, }\AttributeTok{fill =}\NormalTok{ Freq)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_tile}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ Freq), }\AttributeTok{color =} \StringTok{"white"}\NormalTok{, }\AttributeTok{size =} \DecValTok{6}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradient}\NormalTok{(}\AttributeTok{low =} \StringTok{"\#3498DB"}\NormalTok{, }\AttributeTok{high =} \StringTok{"\#1B4F72"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Matriz de Confusión"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{ModeloFinal_files/figure-latex/unnamed-chunk-16-1.pdf}}
+
+\section{Shiny}\label{shiny}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(shiny)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'shiny' was built under R version 4.5.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(caret)}
+
+\CommentTok{\# Aquí asumimos que ya tienes en memoria:}
+\CommentTok{\# {-} rf\_model}
+\CommentTok{\# {-} cm}
+\CommentTok{\# {-} metricas}
+\CommentTok{\# {-} imp\_df (importancia de variables)}
+\CommentTok{\# {-} predictoras (dataset con las features + risk)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ui }\OtherTok{\textless{}{-}} \FunctionTok{fluidPage}\NormalTok{(}
+  \FunctionTok{titlePanel}\NormalTok{(}\StringTok{"Dashboard de Riesgo de Salud Mental"}\NormalTok{),}
+
+  \FunctionTok{sidebarLayout}\NormalTok{(}
+    \FunctionTok{sidebarPanel}\NormalTok{(}
+      \FunctionTok{h4}\NormalTok{(}\StringTok{"Controles"}\NormalTok{),}
+      \FunctionTok{selectInput}\NormalTok{(}
+        \StringTok{"var\_color"}\NormalTok{,}
+        \StringTok{"Color por variable categórica:"}\NormalTok{,}
+        \AttributeTok{choices =} \FunctionTok{c}\NormalTok{(}\StringTok{"gender"}\NormalTok{, }\StringTok{"family\_history"}\NormalTok{, }\StringTok{"benefits"}\NormalTok{, }\StringTok{"leave"}\NormalTok{),}
+        \AttributeTok{selected =} \StringTok{"gender"}
+\NormalTok{      ),}
+      \FunctionTok{hr}\NormalTok{(),}
+      \FunctionTok{h4}\NormalTok{(}\StringTok{"Predicción individual"}\NormalTok{),}
+      \FunctionTok{selectInput}\NormalTok{(}\StringTok{"inp\_gender"}\NormalTok{, }\StringTok{"Género:"}\NormalTok{,}
+                  \AttributeTok{choices =} \FunctionTok{c}\NormalTok{(}\StringTok{"male"}\NormalTok{, }\StringTok{"female"}\NormalTok{, }\StringTok{"nonbinary"}\NormalTok{)),}
+      \FunctionTok{selectInput}\NormalTok{(}\StringTok{"inp\_family\_history"}\NormalTok{, }\StringTok{"Antecedentes familiares:"}\NormalTok{,}
+                  \AttributeTok{choices =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{)),}
+      \FunctionTok{selectInput}\NormalTok{(}\StringTok{"inp\_benefits"}\NormalTok{, }\StringTok{"Beneficios de salud mental:"}\NormalTok{,}
+                  \AttributeTok{choices =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Don\textquotesingle{}t know"}\NormalTok{)),}
+      \FunctionTok{selectInput}\NormalTok{(}\StringTok{"inp\_leave"}\NormalTok{, }\StringTok{"Facilidad para pedir baja:"}\NormalTok{,}
+                  \AttributeTok{choices =} \FunctionTok{c}\NormalTok{(}\StringTok{"Very easy"}\NormalTok{, }\StringTok{"Somewhat easy"}\NormalTok{, }\StringTok{"Somewhat difficult"}\NormalTok{,}
+                              \StringTok{"Very difficult"}\NormalTok{, }\StringTok{"Don\textquotesingle{}t know"}\NormalTok{)),}
+      \FunctionTok{numericInput}\NormalTok{(}\StringTok{"inp\_bmi"}\NormalTok{, }\StringTok{"Índice de masa corporal (BMI):"}\NormalTok{, }\DecValTok{25}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{50}\NormalTok{, }\FloatTok{0.5}\NormalTok{),}
+      \FunctionTok{numericInput}\NormalTok{(}\StringTok{"inp\_distance"}\NormalTok{, }\StringTok{"Distancia casa{-}trabajo (km):"}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+      \FunctionTok{actionButton}\NormalTok{(}\StringTok{"btn\_predict"}\NormalTok{, }\StringTok{"Predecir riesgo"}\NormalTok{)}
+\NormalTok{    ),}
+
+    \FunctionTok{mainPanel}\NormalTok{(}
+      \FunctionTok{tabsetPanel}\NormalTok{(}
+        \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Resumen"}\NormalTok{,}
+                 \FunctionTok{h3}\NormalTok{(}\StringTok{"Métricas del modelo"}\NormalTok{),}
+                 \FunctionTok{tableOutput}\NormalTok{(}\StringTok{"tbl\_metricas"}\NormalTok{),}
+                 \FunctionTok{h4}\NormalTok{(}\StringTok{"Matriz de confusión"}\NormalTok{),}
+                 \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_cm"}\NormalTok{)}
+\NormalTok{        ),}
+        \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Importancia de variables"}\NormalTok{,}
+                 \FunctionTok{h3}\NormalTok{(}\StringTok{"Top 20 variables más importantes"}\NormalTok{),}
+                 \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_importancia"}\NormalTok{),}
+                 \FunctionTok{tableOutput}\NormalTok{(}\StringTok{"tbl\_importancia"}\NormalTok{)}
+\NormalTok{        ),}
+        \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Distribuciones"}\NormalTok{,}
+                 \FunctionTok{h3}\NormalTok{(}\StringTok{"Riesgo por variable seleccionada"}\NormalTok{),}
+                 \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_riesgo\_var"}\NormalTok{)}
+\NormalTok{        ),}
+        \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Predicción individual"}\NormalTok{,}
+                 \FunctionTok{h3}\NormalTok{(}\StringTok{"Resultado de la predicción"}\NormalTok{),}
+                 \FunctionTok{verbatimTextOutput}\NormalTok{(}\StringTok{"txt\_prediccion"}\NormalTok{)}
+\NormalTok{        )}
+\NormalTok{      )}
+\NormalTok{    )}
+\NormalTok{  )}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{server }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(input, output, session) \{}
+
+  \CommentTok{\# {-}{-}{-}{-} Tabla de métricas {-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{tbl\_metricas }\OtherTok{\textless{}{-}} \FunctionTok{renderTable}\NormalTok{(\{}
+\NormalTok{    metricas}
+\NormalTok{  \}, }\AttributeTok{rownames =} \ConstantTok{TRUE}\NormalTok{)}
+
+  \CommentTok{\# {-}{-}{-}{-} Matriz de confusión visual {-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_cm }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+\NormalTok{    cm\_table }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(cm}\SpecialCharTok{$}\NormalTok{table)}
+
+    \FunctionTok{ggplot}\NormalTok{(cm\_table, }\FunctionTok{aes}\NormalTok{(Prediction, Reference, }\AttributeTok{fill =}\NormalTok{ Freq)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_tile}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ Freq), }\AttributeTok{color =} \StringTok{"white"}\NormalTok{, }\AttributeTok{size =} \DecValTok{6}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{scale\_fill\_gradient}\NormalTok{(}\AttributeTok{low =} \StringTok{"\#3498DB"}\NormalTok{, }\AttributeTok{high =} \StringTok{"\#1B4F72"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Matriz de Confusión"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{)}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-} Importancia de variables (plot) {-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_importancia }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+    \FunctionTok{ggplot}\NormalTok{(imp\_df[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{20}\NormalTok{, ], }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(Variable, Importance), }\AttributeTok{y =}\NormalTok{ Importance)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{fill =} \StringTok{"\#2E86C1"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}
+        \AttributeTok{title =} \StringTok{"Top 20 Variables Más Importantes"}\NormalTok{,}
+        \AttributeTok{x =} \StringTok{"Variable"}\NormalTok{,}
+        \AttributeTok{y =} \StringTok{"Importancia (MeanDecreaseGini)"}
+\NormalTok{      ) }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{)}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-} Importancia de variables (tabla) {-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{tbl\_importancia }\OtherTok{\textless{}{-}} \FunctionTok{renderTable}\NormalTok{(\{}
+\NormalTok{    imp\_df[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{20}\NormalTok{, ]}
+\NormalTok{  \}, }\AttributeTok{rownames =} \ConstantTok{FALSE}\NormalTok{)}
+
+  \CommentTok{\# {-}{-}{-}{-} Distribución de riesgo por variable categórica {-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_riesgo\_var }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+\NormalTok{    var\_sel }\OtherTok{\textless{}{-}} \FunctionTok{sym}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{var\_color)}
+
+\NormalTok{    predictoras }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{mutate}\NormalTok{(}\AttributeTok{risk =} \FunctionTok{factor}\NormalTok{(risk, }\AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No riesgo"}\NormalTok{, }\StringTok{"En riesgo"}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \SpecialCharTok{!!}\NormalTok{var\_sel, }\AttributeTok{fill =}\NormalTok{ risk)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{position =} \StringTok{"fill"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\NormalTok{percent) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}
+        \AttributeTok{title =} \FunctionTok{paste}\NormalTok{(}\StringTok{"Proporción de riesgo por"}\NormalTok{, input}\SpecialCharTok{$}\NormalTok{var\_color),}
+        \AttributeTok{x =}\NormalTok{ input}\SpecialCharTok{$}\NormalTok{var\_color,}
+        \AttributeTok{y =} \StringTok{"\% dentro de cada categoría"}\NormalTok{,}
+        \AttributeTok{fill =} \StringTok{"Riesgo"}
+\NormalTok{      ) }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{))}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-} Predicción individual {-}{-}{-}{-}}
+  \FunctionTok{observeEvent}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{btn\_predict, \{}
+    \CommentTok{\# Construir un data.frame con una sola fila}
+\NormalTok{    new\_data }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+      \AttributeTok{gender =} \FunctionTok{factor}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{inp\_gender, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"male"}\NormalTok{, }\StringTok{"female"}\NormalTok{, }\StringTok{"nonbinary"}\NormalTok{)),}
+      \AttributeTok{family\_history =} \FunctionTok{factor}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{inp\_family\_history, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{)),}
+      \AttributeTok{benefits =} \FunctionTok{factor}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{inp\_benefits, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Don\textquotesingle{}t know"}\NormalTok{)),}
+      \AttributeTok{anonymity =} \FunctionTok{factor}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Don\textquotesingle{}t know"}\NormalTok{)),}
+      \AttributeTok{supervisor =} \FunctionTok{factor}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Some of them"}\NormalTok{)),}
+      \AttributeTok{coworkers =} \FunctionTok{factor}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Some of them"}\NormalTok{)),}
+      \AttributeTok{mental\_health\_consequence =} \FunctionTok{factor}\NormalTok{(}\StringTok{"Maybe"}\NormalTok{, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Maybe"}\NormalTok{)),}
+      \AttributeTok{phys\_health\_consequence =} \FunctionTok{factor}\NormalTok{(}\StringTok{"Maybe"}\NormalTok{, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Maybe"}\NormalTok{)),}
+      \AttributeTok{mental\_vs\_physical =} \FunctionTok{factor}\NormalTok{(}\StringTok{"Don\textquotesingle{}t know"}\NormalTok{, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Yes"}\NormalTok{, }\StringTok{"No"}\NormalTok{, }\StringTok{"Don\textquotesingle{}t know"}\NormalTok{)),}
+      \AttributeTok{leave =} \FunctionTok{factor}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{inp\_leave,}
+                     \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Very easy"}\NormalTok{, }\StringTok{"Somewhat easy"}\NormalTok{, }\StringTok{"Somewhat difficult"}\NormalTok{,}
+                                \StringTok{"Very difficult"}\NormalTok{, }\StringTok{"Don\textquotesingle{}t know"}\NormalTok{)),}
+      \AttributeTok{reason\_for\_absence =} \DecValTok{1}\NormalTok{,}
+      \AttributeTok{month\_of\_absence =} \DecValTok{1}\NormalTok{,}
+      \AttributeTok{distance\_from\_residence\_to\_work =}
+        \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{scale}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{inp\_distance,}
+                         \AttributeTok{center =} \FunctionTok{attr}\NormalTok{(}\FunctionTok{scale}\NormalTok{(predictoras}\SpecialCharTok{$}\NormalTok{distance\_from\_residence\_to\_work), }\StringTok{"scaled:center"}\NormalTok{),}
+                         \AttributeTok{scale  =} \FunctionTok{attr}\NormalTok{(}\FunctionTok{scale}\NormalTok{(predictoras}\SpecialCharTok{$}\NormalTok{distance\_from\_residence\_to\_work), }\StringTok{"scaled:scale"}\NormalTok{))),}
+      \AttributeTok{service\_time =} \DecValTok{0}\NormalTok{,}
+      \AttributeTok{social\_drinker =} \DecValTok{0}\NormalTok{,}
+      \AttributeTok{social\_smoker =} \DecValTok{0}\NormalTok{,}
+      \AttributeTok{disciplinary\_failure =} \DecValTok{0}\NormalTok{,}
+      \AttributeTok{body\_mass\_index =}
+        \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{scale}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{inp\_bmi,}
+                         \AttributeTok{center =} \FunctionTok{attr}\NormalTok{(}\FunctionTok{scale}\NormalTok{(predictoras}\SpecialCharTok{$}\NormalTok{body\_mass\_index), }\StringTok{"scaled:center"}\NormalTok{),}
+                         \AttributeTok{scale  =} \FunctionTok{attr}\NormalTok{(}\FunctionTok{scale}\NormalTok{(predictoras}\SpecialCharTok{$}\NormalTok{body\_mass\_index), }\StringTok{"scaled:scale"}\NormalTok{))),}
+      \AttributeTok{absenteeism\_time\_in\_hours =} \DecValTok{0}\NormalTok{,}
+      \AttributeTok{pet =} \DecValTok{0}\NormalTok{,}
+      \AttributeTok{son =} \DecValTok{0}\NormalTok{,}
+      \AttributeTok{age =}
+        \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{scale}\NormalTok{(}\DecValTok{30}\NormalTok{,}
+                         \AttributeTok{center =} \FunctionTok{attr}\NormalTok{(}\FunctionTok{scale}\NormalTok{(predictoras}\SpecialCharTok{$}\NormalTok{age), }\StringTok{"scaled:center"}\NormalTok{),}
+                         \AttributeTok{scale  =} \FunctionTok{attr}\NormalTok{(}\FunctionTok{scale}\NormalTok{(predictoras}\SpecialCharTok{$}\NormalTok{age), }\StringTok{"scaled:scale"}\NormalTok{)))}
+\NormalTok{    )}
+
+    \CommentTok{\# Aplicar mismas dummies que al entrenamiento}
+\NormalTok{    dummies\_new }\OtherTok{\textless{}{-}} \FunctionTok{dummyVars}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ ., }\AttributeTok{data =}\NormalTok{ predictoras }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{risk))}
+\NormalTok{    X\_new }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(dummies\_new, }\AttributeTok{newdata =}\NormalTok{ new\_data) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as.data.frame}\NormalTok{()}
+
+    \CommentTok{\# Predicción}
+\NormalTok{    pred\_new }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(rf\_model, X\_new, }\AttributeTok{type =} \StringTok{"prob"}\NormalTok{)}
+
+\NormalTok{    riesgo }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(pred\_new[,}\StringTok{"1"}\NormalTok{] }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+
+\NormalTok{    output}\SpecialCharTok{$}\NormalTok{txt\_prediccion }\OtherTok{\textless{}{-}} \FunctionTok{renderText}\NormalTok{(\{}
+      \FunctionTok{paste0}\NormalTok{(}\StringTok{"Probabilidad estimada de estar EN RIESGO: "}\NormalTok{, riesgo, }\StringTok{"\%"}\NormalTok{)}
+\NormalTok{    \})}
+\NormalTok{  \})}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{shinyApp}\NormalTok{(}\AttributeTok{ui =}\NormalTok{ ui, }\AttributeTok{server =}\NormalTok{ server)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Ejemplo práctico de la ejecución del modelo
+predictivo}\label{ejemplo-pruxe1ctico-de-la-ejecuciuxf3n-del-modelo-predictivo}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{500}  \CommentTok{\# número de empleados ficticios}
+
+\NormalTok{empleados }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{id =} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n,}
+  \AttributeTok{nombre =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"Empleado\_"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\NormalTok{n),}
+  \AttributeTok{departamento =} \FunctionTok{sample}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Operaciones"}\NormalTok{, }\StringTok{"Ventas"}\NormalTok{, }\StringTok{"IT"}\NormalTok{, }\StringTok{"RRHH"}\NormalTok{, }\StringTok{"Finanzas"}\NormalTok{),}
+\NormalTok{    n, }\AttributeTok{replace =} \ConstantTok{TRUE}
+\NormalTok{  ),}
+  \AttributeTok{puesto =} \FunctionTok{sample}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"Analista"}\NormalTok{, }\StringTok{"Coordinador"}\NormalTok{, }\StringTok{"Gerente"}\NormalTok{, }\StringTok{"Ejecutivo"}\NormalTok{, }\StringTok{"Especialista"}\NormalTok{),}
+\NormalTok{    n, }\AttributeTok{replace =} \ConstantTok{TRUE}
+\NormalTok{  ),}
+  \AttributeTok{productividad =} \FunctionTok{round}\NormalTok{(}\FunctionTok{runif}\NormalTok{(n, }\DecValTok{60}\NormalTok{, }\DecValTok{100}\NormalTok{), }\DecValTok{1}\NormalTok{),}
+  \AttributeTok{carga\_laboral =} \FunctionTok{round}\NormalTok{(}\FunctionTok{runif}\NormalTok{(n, }\DecValTok{70}\NormalTok{, }\DecValTok{130}\NormalTok{), }\DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{muestras }\OtherTok{\textless{}{-}}\NormalTok{ predictoras[}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(predictoras), n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{), ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Aplicar las mismas dummies que en el entrenamiento}
+\NormalTok{dummies\_pred }\OtherTok{\textless{}{-}} \FunctionTok{dummyVars}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ ., }\AttributeTok{data =}\NormalTok{ predictoras }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{risk))}
+\NormalTok{X\_sintetico }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(dummies\_pred, }\AttributeTok{newdata =}\NormalTok{ muestras) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{as.data.frame}\NormalTok{()}
+
+\CommentTok{\# Predicción de riesgo}
+\NormalTok{pred\_riesgo }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(rf\_model, X\_sintetico, }\AttributeTok{type =} \StringTok{"prob"}\NormalTok{)}
+
+\NormalTok{empleados}\SpecialCharTok{$}\NormalTok{riesgo }\OtherTok{\textless{}{-}}\NormalTok{ pred\_riesgo[, }\StringTok{"1"}\NormalTok{]}
+\NormalTok{empleados}\SpecialCharTok{$}\NormalTok{riesgo\_nivel }\OtherTok{\textless{}{-}} \FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{  empleados}\SpecialCharTok{$}\NormalTok{riesgo }\SpecialCharTok{\textgreater{}=} \FloatTok{0.66} \SpecialCharTok{\textasciitilde{}} \StringTok{"Alto"}\NormalTok{,}
+\NormalTok{  empleados}\SpecialCharTok{$}\NormalTok{riesgo }\SpecialCharTok{\textgreater{}=} \FloatTok{0.33} \SpecialCharTok{\textasciitilde{}} \StringTok{"Medio"}\NormalTok{,}
+  \ConstantTok{TRUE} \SpecialCharTok{\textasciitilde{}} \StringTok{"Bajo"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{kpi\_riesgo\_promedio }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(empleados}\SpecialCharTok{$}\NormalTok{riesgo)}
+\NormalTok{kpi\_riesgo\_alto }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(empleados}\SpecialCharTok{$}\NormalTok{riesgo\_nivel }\SpecialCharTok{==} \StringTok{"Alto"}\NormalTok{)}
+\NormalTok{kpi\_productividad }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(empleados}\SpecialCharTok{$}\NormalTok{productividad)}
+\NormalTok{kpi\_carga }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(empleados}\SpecialCharTok{$}\NormalTok{carga\_laboral)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(bslib)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Adjuntando el paquete: 'bslib'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:utils':
+## 
+##     page
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(shinyWidgets)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'shinyWidgets' was built under R version 4.5.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ui }\OtherTok{\textless{}{-}} \FunctionTok{fluidPage}\NormalTok{(}
+  \AttributeTok{theme =} \FunctionTok{bs\_theme}\NormalTok{(}
+    \AttributeTok{version =} \DecValTok{5}\NormalTok{,}
+    \AttributeTok{bootswatch =} \StringTok{"flatly"}\NormalTok{,}
+    \AttributeTok{primary =} \StringTok{"\#2E86C1"}\NormalTok{,}
+    \AttributeTok{secondary =} \StringTok{"\#1B4F72"}\NormalTok{,}
+    \AttributeTok{base\_font =} \FunctionTok{font\_google}\NormalTok{(}\StringTok{"Inter"}\NormalTok{)}
+\NormalTok{  ),}
+
+  \FunctionTok{navbarPage}\NormalTok{(}
+    \AttributeTok{title =} \FunctionTok{div}\NormalTok{(}
+      \AttributeTok{style =} \StringTok{"font{-}weight:700; font{-}size:22px; color:\#1B4F72;"}\NormalTok{,}
+      \StringTok{"Impulso — Bienestar y Riesgo"}
+\NormalTok{    ),}
+
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} DASHBOARD GENERAL {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+    \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Dashboard General"}\NormalTok{,}
+      \FunctionTok{br}\NormalTok{(),}
+      \FunctionTok{fluidRow}\NormalTok{(}
+        \FunctionTok{column}\NormalTok{(}\DecValTok{3}\NormalTok{, }
+          \FunctionTok{card}\NormalTok{(}
+            \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Nivel de Riesgo"}\NormalTok{),}
+            \FunctionTok{h2}\NormalTok{(}\AttributeTok{style=}\StringTok{"color:\#C0392B;"}\NormalTok{, }\FunctionTok{paste0}\NormalTok{(}\FunctionTok{round}\NormalTok{(kpi\_riesgo\_promedio}\SpecialCharTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"\%"}\NormalTok{)),}
+            \FunctionTok{p}\NormalTok{(}\StringTok{"Promedio general"}\NormalTok{)}
+\NormalTok{          )}
+\NormalTok{        ),}
+        \FunctionTok{column}\NormalTok{(}\DecValTok{3}\NormalTok{, }
+          \FunctionTok{card}\NormalTok{(}
+            \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Riesgo Alto"}\NormalTok{),}
+            \FunctionTok{h2}\NormalTok{(}\AttributeTok{style=}\StringTok{"color:\#C0392B;"}\NormalTok{, }\FunctionTok{paste0}\NormalTok{(}\FunctionTok{round}\NormalTok{(kpi\_riesgo\_alto}\SpecialCharTok{*}\DecValTok{100}\NormalTok{,}\DecValTok{1}\NormalTok{), }\StringTok{"\%"}\NormalTok{)),}
+            \FunctionTok{p}\NormalTok{(}\StringTok{"Empleados en riesgo alto"}\NormalTok{)}
+\NormalTok{          )}
+\NormalTok{        ),}
+        \FunctionTok{column}\NormalTok{(}\DecValTok{3}\NormalTok{, }
+          \FunctionTok{card}\NormalTok{(}
+            \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Productividad"}\NormalTok{),}
+            \FunctionTok{h2}\NormalTok{(}\AttributeTok{style=}\StringTok{"color:\#2E86C1;"}\NormalTok{, }\FunctionTok{paste0}\NormalTok{(}\FunctionTok{round}\NormalTok{(kpi\_productividad,}\DecValTok{1}\NormalTok{), }\StringTok{"\%"}\NormalTok{)),}
+            \FunctionTok{p}\NormalTok{(}\StringTok{"Último mes"}\NormalTok{)}
+\NormalTok{          )}
+\NormalTok{        ),}
+        \FunctionTok{column}\NormalTok{(}\DecValTok{3}\NormalTok{, }
+          \FunctionTok{card}\NormalTok{(}
+            \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Carga Laboral"}\NormalTok{),}
+            \FunctionTok{h2}\NormalTok{(}\AttributeTok{style=}\StringTok{"color:\#1B4F72;"}\NormalTok{, }\FunctionTok{paste0}\NormalTok{(}\FunctionTok{round}\NormalTok{(kpi\_carga,}\DecValTok{1}\NormalTok{), }\StringTok{"\%"}\NormalTok{)),}
+            \FunctionTok{p}\NormalTok{(}\StringTok{"Promedio general"}\NormalTok{)}
+\NormalTok{          )}
+\NormalTok{        )}
+\NormalTok{      ),}
+      \FunctionTok{br}\NormalTok{(),}
+      \FunctionTok{card}\NormalTok{(}
+        \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Tendencia de Rendimiento y Riesgo"}\NormalTok{),}
+        \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_tendencia"}\NormalTok{, }\AttributeTok{height =} \StringTok{"300px"}\NormalTok{)}
+\NormalTok{      ),}
+      \FunctionTok{br}\NormalTok{(),}
+      \FunctionTok{card}\NormalTok{(}
+        \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Comparación por Área"}\NormalTok{),}
+        \FunctionTok{tableOutput}\NormalTok{(}\StringTok{"tabla\_comparacion"}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{    ),}
+
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} EMPLEADOS {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+    \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Empleados"}\NormalTok{,}
+      \FunctionTok{sidebarLayout}\NormalTok{(}
+        \FunctionTok{sidebarPanel}\NormalTok{(}
+          \FunctionTok{selectInput}\NormalTok{(}\StringTok{"filtro\_dep"}\NormalTok{, }\StringTok{"Departamento:"}\NormalTok{,}
+                      \AttributeTok{choices =} \FunctionTok{unique}\NormalTok{(empleados}\SpecialCharTok{$}\NormalTok{departamento)),}
+          \FunctionTok{textInput}\NormalTok{(}\StringTok{"buscar"}\NormalTok{, }\StringTok{"Buscar empleado:"}\NormalTok{)}
+\NormalTok{        ),}
+        \FunctionTok{mainPanel}\NormalTok{(}
+          \FunctionTok{card}\NormalTok{(}
+            \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Listado de Empleados"}\NormalTok{),}
+            \FunctionTok{tableOutput}\NormalTok{(}\StringTok{"tabla\_empleados"}\NormalTok{)}
+\NormalTok{          )}
+\NormalTok{        )}
+\NormalTok{      )}
+\NormalTok{    ),}
+
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} ANALISIS DE RIESGO {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+    \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Análisis de Riesgo"}\NormalTok{,}
+      \FunctionTok{card}\NormalTok{(}
+        \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Riesgo por Departamento"}\NormalTok{),}
+        \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_riesgo\_dep"}\NormalTok{)}
+\NormalTok{      ),}
+      \FunctionTok{br}\NormalTok{(),}
+      \FunctionTok{card}\NormalTok{(}
+        \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Distribución del Riesgo"}\NormalTok{),}
+        \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_riesgo\_hist"}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{    ),}
+
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} FACTORES DE RIESGO {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+    \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Factores de Riesgo"}\NormalTok{,}
+      \FunctionTok{card}\NormalTok{(}
+        \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Importancia de Variables"}\NormalTok{),}
+        \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_importancia"}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{    ),}
+
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} SEGMENTACIÓN (CORREGIDA) {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+    \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Segmentación"}\NormalTok{,}
+      \FunctionTok{br}\NormalTok{(),}
+      \FunctionTok{card}\NormalTok{(}
+        \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Resumen por Departamento"}\NormalTok{),}
+        \FunctionTok{tableOutput}\NormalTok{(}\StringTok{"tabla\_segmentacion"}\NormalTok{)}
+\NormalTok{      ),}
+      \FunctionTok{br}\NormalTok{(),}
+      \FunctionTok{fluidRow}\NormalTok{(}
+        \FunctionTok{column}\NormalTok{(}\DecValTok{6}\NormalTok{,}
+          \FunctionTok{card}\NormalTok{(}
+            \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Riesgo Promedio por Departamento"}\NormalTok{),}
+            \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_seg\_riesgo"}\NormalTok{)}
+\NormalTok{          )}
+\NormalTok{        ),}
+        \FunctionTok{column}\NormalTok{(}\DecValTok{6}\NormalTok{,}
+          \FunctionTok{card}\NormalTok{(}
+            \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Productividad Promedio por Departamento"}\NormalTok{),}
+            \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_seg\_prod"}\NormalTok{)}
+\NormalTok{          )}
+\NormalTok{        )}
+\NormalTok{      ),}
+      \FunctionTok{br}\NormalTok{(),}
+      \FunctionTok{card}\NormalTok{(}
+        \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Distribución de Niveles de Riesgo por Departamento"}\NormalTok{),}
+        \FunctionTok{plotOutput}\NormalTok{(}\StringTok{"plot\_seg\_niveles"}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{    ),}
+
+    \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} RECOMENDACIONES {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+    \FunctionTok{tabPanel}\NormalTok{(}\StringTok{"Recomendaciones"}\NormalTok{,}
+      \FunctionTok{card}\NormalTok{(}
+        \FunctionTok{card\_header}\NormalTok{(}\StringTok{"Sugerencias Automáticas"}\NormalTok{),}
+        \FunctionTok{verbatimTextOutput}\NormalTok{(}\StringTok{"txt\_recomendaciones"}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{    )}
+\NormalTok{  )}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{server }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(input, output, session) \{}
+
+  \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} TENDENCIA (CORREGIDA) {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_tendencia }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+\NormalTok{    df }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+      \AttributeTok{mes =} \FunctionTok{factor}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Ene"}\NormalTok{, }\StringTok{"Feb"}\NormalTok{, }\StringTok{"Mar"}\NormalTok{, }\StringTok{"Abr"}\NormalTok{, }\StringTok{"May"}\NormalTok{, }\StringTok{"Jun"}\NormalTok{),}
+                   \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Ene"}\NormalTok{, }\StringTok{"Feb"}\NormalTok{, }\StringTok{"Mar"}\NormalTok{, }\StringTok{"Abr"}\NormalTok{, }\StringTok{"May"}\NormalTok{, }\StringTok{"Jun"}\NormalTok{)),}
+      \AttributeTok{rendimiento =} \FunctionTok{seq}\NormalTok{(}\DecValTok{75}\NormalTok{, }\DecValTok{85}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{6}\NormalTok{),}
+      \AttributeTok{riesgo =} \FunctionTok{seq}\NormalTok{(}\DecValTok{25}\NormalTok{, }\DecValTok{35}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{6}\NormalTok{)}
+\NormalTok{    )}
+
+    \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(mes)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ rendimiento, }\AttributeTok{color =} \StringTok{"Rendimiento"}\NormalTok{), }\AttributeTok{size =} \FloatTok{1.5}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ rendimiento, }\AttributeTok{color =} \StringTok{"Rendimiento"}\NormalTok{), }\AttributeTok{size =} \DecValTok{3}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ riesgo, }\AttributeTok{color =} \StringTok{"Riesgo"}\NormalTok{), }\AttributeTok{size =} \FloatTok{1.5}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ riesgo, }\AttributeTok{color =} \StringTok{"Riesgo"}\NormalTok{), }\AttributeTok{size =} \DecValTok{3}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Rendimiento"} \OtherTok{=} \StringTok{"\#2E86C1"}\NormalTok{, }\StringTok{"Riesgo"} \OtherTok{=} \StringTok{"\#C0392B"}\NormalTok{)) }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{16}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Tendencia de Rendimiento y Riesgo"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Valor"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Mes"}\NormalTok{, }\AttributeTok{color =} \StringTok{""}\NormalTok{)}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} TABLA COMPARACIÓN {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{tabla\_comparacion }\OtherTok{\textless{}{-}} \FunctionTok{renderTable}\NormalTok{(\{}
+\NormalTok{    empleados }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{group\_by}\NormalTok{(departamento) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{summarise}\NormalTok{(}
+        \AttributeTok{empleados =} \FunctionTok{n}\NormalTok{(),}
+        \AttributeTok{riesgo\_promedio =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(riesgo) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+        \AttributeTok{productividad\_promedio =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(productividad), }\DecValTok{1}\NormalTok{),}
+        \AttributeTok{carga\_promedio =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(carga\_laboral), }\DecValTok{1}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} EMPLEADOS {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{tabla\_empleados }\OtherTok{\textless{}{-}} \FunctionTok{renderTable}\NormalTok{(\{}
+\NormalTok{    empleados }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{filter}\NormalTok{(departamento }\SpecialCharTok{==}\NormalTok{ input}\SpecialCharTok{$}\NormalTok{filtro\_dep) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{filter}\NormalTok{(}\FunctionTok{str\_detect}\NormalTok{(nombre, }\FunctionTok{regex}\NormalTok{(input}\SpecialCharTok{$}\NormalTok{buscar, }\AttributeTok{ignore\_case =} \ConstantTok{TRUE}\NormalTok{)))}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} RIESGO POR DEP {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_riesgo\_dep }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+\NormalTok{    empleados }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{group\_by}\NormalTok{(departamento) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{summarise}\NormalTok{(}\AttributeTok{riesgo\_promedio =} \FunctionTok{mean}\NormalTok{(riesgo)) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(departamento, riesgo\_promedio),}
+                 \AttributeTok{y =}\NormalTok{ riesgo\_promedio,}
+                 \AttributeTok{fill =}\NormalTok{ departamento)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_col}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Riesgo Promedio"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Departamento"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Set2"}\NormalTok{)}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} HISTOGRAMA RIESGO {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_riesgo\_hist }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+    \FunctionTok{ggplot}\NormalTok{(empleados, }\FunctionTok{aes}\NormalTok{(riesgo)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{fill =} \StringTok{"\#2E86C1"}\NormalTok{, }\AttributeTok{bins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Distribución del riesgo"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Riesgo"}\NormalTok{)}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} IMPORTANCIA {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_importancia }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+    \FunctionTok{ggplot}\NormalTok{(imp\_df[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{20}\NormalTok{, ], }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(Variable, Importance), }\AttributeTok{y =}\NormalTok{ Importance)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{fill =} \StringTok{"\#C0392B"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Top 20 factores de riesgo"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Variable"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Importancia"}\NormalTok{)}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} SEGMENTACIÓN (CORREGIDA) {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{tabla\_segmentacion }\OtherTok{\textless{}{-}} \FunctionTok{renderTable}\NormalTok{(\{}
+\NormalTok{    empleados }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{group\_by}\NormalTok{(departamento) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{summarise}\NormalTok{(}
+        \AttributeTok{empleados =} \FunctionTok{n}\NormalTok{(),}
+        \AttributeTok{riesgo\_promedio =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(riesgo) }\SpecialCharTok{*} \DecValTok{100}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+        \AttributeTok{productividad\_promedio =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(productividad), }\DecValTok{1}\NormalTok{),}
+        \AttributeTok{carga\_promedio =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(carga\_laboral), }\DecValTok{1}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{  \})}
+
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_seg\_riesgo }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+\NormalTok{    empleados }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{group\_by}\NormalTok{(departamento) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{summarise}\NormalTok{(}\AttributeTok{riesgo\_promedio =} \FunctionTok{mean}\NormalTok{(riesgo)) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(departamento, riesgo\_promedio),}
+                 \AttributeTok{y =}\NormalTok{ riesgo\_promedio,}
+                 \AttributeTok{fill =}\NormalTok{ departamento)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_col}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Riesgo Promedio"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Departamento"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Set2"}\NormalTok{)}
+\NormalTok{  \})}
+
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_seg\_prod }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+\NormalTok{    empleados }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{group\_by}\NormalTok{(departamento) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{summarise}\NormalTok{(}\AttributeTok{productividad\_promedio =} \FunctionTok{mean}\NormalTok{(productividad)) }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(departamento, productividad\_promedio),}
+                 \AttributeTok{y =}\NormalTok{ productividad\_promedio,}
+                 \AttributeTok{fill =}\NormalTok{ departamento)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_col}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Productividad Promedio"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Departamento"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Set3"}\NormalTok{)}
+\NormalTok{  \})}
+
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{plot\_seg\_niveles }\OtherTok{\textless{}{-}} \FunctionTok{renderPlot}\NormalTok{(\{}
+\NormalTok{    empleados }\SpecialCharTok{\%\textgreater{}\%}
+      \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ departamento, }\AttributeTok{fill =}\NormalTok{ riesgo\_nivel)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{position =} \StringTok{"fill"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\NormalTok{percent) }\SpecialCharTok{+}
+      \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"\% dentro del departamento"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Departamento"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Nivel de Riesgo"}\NormalTok{) }\SpecialCharTok{+}
+      \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Bajo"} \OtherTok{=} \StringTok{"\#2ECC71"}\NormalTok{, }\StringTok{"Medio"} \OtherTok{=} \StringTok{"\#F1C40F"}\NormalTok{, }\StringTok{"Alto"} \OtherTok{=} \StringTok{"\#E74C3C"}\NormalTok{))}
+\NormalTok{  \})}
+
+  \CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} RECOMENDACIONES {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{txt\_recomendaciones }\OtherTok{\textless{}{-}} \FunctionTok{renderText}\NormalTok{(\{}
+    \FunctionTok{paste}\NormalTok{(}
+      \StringTok{"{-} Reducir carga laboral en Operaciones."}\NormalTok{,}
+      \StringTok{"{-} Implementar pausas activas en áreas con riesgo alto."}\NormalTok{,}
+      \StringTok{"{-} Revisar políticas de apoyo psicológico."}\NormalTok{,}
+      \StringTok{"{-} Monitorear empleados con riesgo \textgreater{} 0.7."}\NormalTok{,}
+      \AttributeTok{sep =} \StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}
+\NormalTok{    )}
+\NormalTok{  \})}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{shinyApp}\NormalTok{(}\AttributeTok{ui =}\NormalTok{ ui, }\AttributeTok{server =}\NormalTok{ server)}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}

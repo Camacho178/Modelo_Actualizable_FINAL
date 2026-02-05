@@ -1,0 +1,190 @@
+---
+title: "Modelo_2"
+author: "Arturo Camacho"
+date: "2026-02-04"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Primer intento - Nuevo Modelo 2
+
+```{r}
+# ============================
+# CHUNK 1: Cargar librerías y datos
+# ============================
+
+library(tidyverse)
+library(cluster)       # Para clustering
+library(factoextra)    # Visualización de clusters
+library(caret)         # Modelos y partición
+library(janitor)       # Limpieza de nombres
+library(dplyr)
+
+# Cargar datasets
+survey <- read_csv("survey.csv") %>% clean_names()
+absent <- read_csv2("Absenteeism_at_work.csv") %>% clean_names()
+
+# Ver estructura
+glimpse(survey)
+glimpse(absent)
+
+```
+
+```{r}
+# ============================
+# CHUNK 2: Limpieza del survey
+# ============================
+
+survey_clean <- survey %>%
+  mutate(
+    gender = tolower(gender),
+    gender = case_when(
+      gender %in% c("male", "m", "male-ish", "maile", "cis male") ~ "male",
+      gender %in% c("female", "f", "cis female", "trans-female") ~ "female",
+      TRUE ~ "other"
+    ),
+    work_interfere = na_if(work_interfere, "NA"),
+    treatment = ifelse(treatment == "Yes", 1, 0)
+  )
+
+```
+
+
+```{r}
+# ============================
+# CHUNK 3: Crear variable target
+# ============================
+
+survey_clean <- survey_clean %>%
+  mutate(
+    risk_score = 
+      1 * (treatment == 1) +
+      1 * (work_interfere %in% c("Often", "Sometimes")) +
+      1 * (mental_health_consequence == "Yes") +
+      1 * (family_history == "Yes"),
+
+    # Convertimos a binario: 1 = riesgo alto
+    risk_target = ifelse(risk_score >= 2, 1, 0)
+  )
+
+table(survey_clean$risk_target)
+```
+
+```{r}
+# ============================
+# CHUNK 4: Limpieza de absenteeism
+# ============================
+
+absent_clean <- absent %>%
+  select(
+    age, distance_from_residence_to_work, service_time,
+    work_load_average_day, hit_target, disciplinary_failure,
+    social_drinker, social_smoker, body_mass_index,
+    absenteeism_time_in_hours
+  ) %>%
+  drop_na()
+
+summary(absent_clean)
+
+```
+
+```{r}
+# ============================
+# CHUNK 5: Clustering de patrones laborales
+# ============================
+
+set.seed(123)
+
+# Escalar variables
+absent_scaled <- scale(absent_clean)
+
+# Elegimos 3 clusters (puedes ajustar)
+k <- 3
+clustering <- kmeans(absent_scaled, centers = k, nstart = 25)
+
+absent_clean$cluster <- clustering$cluster
+
+# Revisar características de cada cluster
+cluster_profiles <- absent_clean %>%
+  group_by(cluster) %>%
+  summarise(across(everything(), mean))
+
+cluster_profiles
+
+```
+
+
+```{r}
+# ============================
+# CHUNK 6: Asignar patrones al survey
+# ============================
+
+# Crear rangos de edad en absenteeism
+absent_clean <- absent_clean %>%
+  mutate(age_group = cut(age, breaks = c(15,25,35,45,55,65), include.lowest = TRUE))
+
+# Promedios por grupo de edad
+age_profiles <- absent_clean %>%
+  group_by(age_group) %>%
+  summarise(
+    avg_absenteeism = mean(absenteeism_time_in_hours),
+    avg_bmi = mean(body_mass_index),
+    avg_workload = mean(work_load_average_day),
+    avg_distance = mean(distance_from_residence_to_work)
+  )
+
+# Asignar grupos de edad al survey
+survey_clean <- survey_clean %>%
+  mutate(age_group = cut(age, breaks = c(15,25,35,45,55,65), include.lowest = TRUE)) %>%
+  left_join(age_profiles, by = "age_group")
+
+```
+
+
+```{r}
+# ============================
+# CHUNK 7: Modelo de regresión logística
+# ============================
+
+# Seleccionar variables predictoras
+model_data <- survey_clean %>%
+  select(risk_target, gender, age, work_interfere, family_history,
+         benefits, leave, supervisor, avg_absenteeism, avg_bmi, avg_workload)
+
+# Convertir categóricas
+model_data <- model_data %>%
+  mutate(across(where(is.character), as.factor))
+
+# Partición
+set.seed(123)
+trainIndex <- createDataPartition(model_data$risk_target, p = .8, list = FALSE)
+train <- model_data[trainIndex,]
+test  <- model_data[-trainIndex,]
+
+# Entrenar modelo
+log_model <- glm(risk_target ~ ., data = train, family = binomial)
+
+summary(log_model)
+
+```
+
+
+
+```{r}
+# ============================
+# CHUNK 8: Evaluación del modelo
+# ============================
+
+pred <- predict(log_model, newdata = test, type = "response")
+pred_class <- ifelse(pred > 0.5, 1, 0)
+
+confusionMatrix(
+  factor(pred_class),
+  factor(test$risk_target)
+)
+
+```
+
