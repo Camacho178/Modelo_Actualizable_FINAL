@@ -826,6 +826,174 @@ st.markdown("""
         font-weight: 700;
     }
 
+    /* FACTORES DE RIESGO */
+    .fr-summary {
+        background: #eef4ff;
+        border: 1px solid #d7e3ff;
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin-bottom: 18px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .fr-summary-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #16337b;
+        margin-bottom: 4px;
+    }
+
+    .fr-summary-text {
+        font-size: 12px;
+        color: #5d6c80;
+        margin-bottom: 12px;
+    }
+
+    .fr-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .fr-summary-item {
+        background: white;
+        border: 1px solid #e9edf3;
+        border-radius: 12px;
+        padding: 10px 12px;
+        text-align: center;
+    }
+
+    .fr-summary-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #16337b;
+    }
+
+    .fr-summary-label {
+        font-size: 11px;
+        color: #7a8aa0;
+    }
+
+    .fr-factor-card {
+        border-radius: 14px;
+        padding: 14px 16px;
+        border: 1px solid #e9edf3;
+        min-height: 120px;
+        position: relative;
+    }
+
+    .fr-factor-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+    }
+
+    .fr-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        background: white;
+        border: 1px solid #e9edf3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .fr-factor-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #16337b;
+    }
+
+    .fr-factor-desc {
+        font-size: 12px;
+        color: #6f7f96;
+    }
+
+    .fr-factor-pct {
+        position: absolute;
+        right: 16px;
+        top: 14px;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .fr-detail-card {
+        border: 1px solid #e9edf3;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 14px;
+        background: white;
+    }
+
+    .fr-detail-header {
+        padding: 14px 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-left: 4px solid transparent;
+    }
+
+    .fr-detail-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #16337b;
+    }
+
+    .fr-detail-sub {
+        font-size: 12px;
+        color: #6f7f96;
+    }
+
+    .fr-detail-pct {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .fr-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        padding: 12px 18px 8px 18px;
+    }
+
+    .fr-metric-chip {
+        background: #f7f9fc;
+        border: 1px solid #e6edf5;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 12px;
+        color: #5d6c80;
+    }
+
+    .fr-progress {
+        padding: 0 18px 14px 18px;
+    }
+
+    .fr-progress-track {
+        height: 8px;
+        background: #e9edf3;
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .fr-progress-bar {
+        height: 100%;
+        border-radius: 999px;
+    }
+
+    .fr-progress-label {
+        font-size: 11px;
+        color: #7a8aa0;
+        margin-top: 6px;
+        display: flex;
+        justify-content: space-between;
+    }
+
     /* RECOMENDACIONES (ACORDEON) */
     details.rec-accordion {
         background: white;
@@ -1697,7 +1865,7 @@ with tabs[2]:
 with tabs[3]:
     st.markdown("<div class='fade-in'>", unsafe_allow_html=True)
 
-    st.markdown("<div class='section-title'>Factores de Riesgo</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>Factores de Riesgo Clave</div>", unsafe_allow_html=True)
 
     f1, f2 = st.columns(2)
     with f1:
@@ -1709,43 +1877,143 @@ with tabs[3]:
 
     df_f = df if selected_dept == "Todos" else df[df["department"] == selected_dept]
 
-    k1, k2, k3, k4 = st.columns(4)
     score_general = df_f["risk_score"].mean() * 100
     prob_burnout = df_f["burnout"].mean() / 5 * 100
     high_risk = (df_f["risk_level"] == "Alto").sum()
     abs_rate = df_f["absenteeism"].mean() / 80 * 100
 
-    k1.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Score de Riesgo General</div>
-    <div class='kpi-value'>{score_general:.1f}/100</div>
-    <div class='kpi-sub'>+4.1% este mes</div>
-</div>
-    """, unsafe_allow_html=True)
+    risk_factors = [
+        {
+            "name": "Carga Laboral",
+            "percent": 34,
+            "desc": "Alto estrés debido a tareas excesivas y plazos ajustados",
+            "color": "#ff6b81",
+            "bg": "#fff3f4",
+            "border": "#ffd3da",
+            "metrics": [
+                "Promedio de horas semanales: 52h",
+                "Tareas simultáneas: 8-12 por empleado",
+                "Plazos urgentes: 65% de proyectos",
+            ],
+        },
+        {
+            "name": "Falta de Apoyo",
+            "percent": 25,
+            "desc": "Baja percepción de apoyo gerencial y acompañamiento",
+            "color": "#25b5e8",
+            "bg": "#eff8ff",
+            "border": "#cfe9ff",
+            "metrics": [
+                "Reuniones 1:1 con gerentes: 1 vez/mes",
+                "Satisfacción con liderazgo: 52%",
+                "Acceso a mentoría: 38% de empleados",
+            ],
+        },
+        {
+            "name": "Estigma/Preocupaciones",
+            "percent": 18,
+            "desc": "Miedo a consecuencias por discutir salud mental",
+            "color": "#6aa6ff",
+            "bg": "#f2f6ff",
+            "border": "#dbe5ff",
+            "metrics": [
+                "Empleados que reportan problemas: 15%",
+                "Percepción de confidencialidad: 48%",
+                "Cultura de apertura: 3.2/10",
+            ],
+        },
+        {
+            "name": "Falta de Balance",
+            "percent": 15,
+            "desc": "Dificultad para mantener balance vida-trabajo",
+            "color": "#16337b",
+            "bg": "#eef2ff",
+            "border": "#d4dcff",
+            "metrics": [
+                "Días de vacaciones usados: 42% del total",
+                "Desconexión fuera de horario: 23%",
+                "Satisfacción con balance: 4.8/10",
+            ],
+        },
+    ]
 
-    k2.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Probabilidad de Burnout</div>
-    <div class='kpi-value'>{prob_burnout:.0f}%</div>
-    <div class='kpi-sub'>+3.0% este mes</div>
-</div>
-    """, unsafe_allow_html=True)
+    coverage = sum(item["percent"] for item in risk_factors)
+    impacted_pct = (
+        df_f["risk_level"].isin(["Medio", "Alto"]).mean() * 100 if not df_f.empty else 0
+    )
+    urgency = "Alto" if impacted_pct >= 60 else "Medio" if impacted_pct >= 40 else "Bajo"
 
-    k3.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Empleados en Alto Riesgo</div>
-    <div class='kpi-value'>{high_risk}</div>
-    <div class='kpi-sub'>+2.5% este mes</div>
+    st.markdown(
+        f"""
+<div class='fr-summary'>
+    <div class='fr-summary-title'>Resumen de Factores</div>
+    <div class='fr-summary-text'>
+        Los cuatro factores principales representan el {coverage}% del riesgo total identificado.
+        La carga laboral sigue siendo el factor más crítico, con impacto directo en burnout y ausentismo.
+    </div>
+    <div class='fr-summary-grid'>
+        <div class='fr-summary-item'>
+            <div class='fr-summary-value'>{coverage}%</div>
+            <div class='fr-summary-label'>Cobertura Total</div>
+        </div>
+        <div class='fr-summary-item'>
+            <div class='fr-summary-value'>{len(risk_factors)}</div>
+            <div class='fr-summary-label'>Factores Clave</div>
+        </div>
+        <div class='fr-summary-item'>
+            <div class='fr-summary-value'>{impacted_pct:.0f}%</div>
+            <div class='fr-summary-label'>Empleados Afectados</div>
+        </div>
+        <div class='fr-summary-item'>
+            <div class='fr-summary-value'>{urgency}</div>
+            <div class='fr-summary-label'>Nivel de Urgencia</div>
+        </div>
+    </div>
 </div>
-    """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
 
-    k4.markdown(f"""
-<div class='kpi-card'>
-    <div class='kpi-title'>Tasa de Ausentismo</div>
-    <div class='kpi-value'>{abs_rate:.1f}%</div>
-    <div class='kpi-sub'>-0.8% este mes</div>
+    fcols = st.columns(4)
+    for idx, item in enumerate(risk_factors):
+        card_html = f"""
+<div class='fr-factor-card' style='background:{item["bg"]}; border-color:{item["border"]};'>
+    <div class='fr-factor-top'>
+        <div class='fr-icon' style='color:{item["color"]}; border-color:{item["border"]};'>{item["name"][:2].upper()}</div>
+        <div class='fr-factor-title'>{item["name"]}</div>
+    </div>
+    <div class='fr-factor-desc'>{item["desc"]}</div>
+    <div class='fr-factor-pct' style='color:{item["color"]};'>{item["percent"]}%</div>
 </div>
-    """, unsafe_allow_html=True)
+        """
+        fcols[idx].markdown(card_html, unsafe_allow_html=True)
+
+    for item in risk_factors:
+        metrics_html = "".join([f"<div class='fr-metric-chip'>{m}</div>" for m in item["metrics"]])
+        detail_html = f"""
+<div class='fr-detail-card'>
+    <div class='fr-detail-header' style='background:{item["bg"]}; border-left-color:{item["color"]};'>
+        <div>
+            <div class='fr-detail-title'>{item["name"]}</div>
+            <div class='fr-detail-sub'>{item["desc"]}</div>
+        </div>
+        <div class='fr-detail-pct' style='color:{item["color"]};'>{item["percent"]}%</div>
+    </div>
+    <div class='fr-metrics'>
+        {metrics_html}
+    </div>
+    <div class='fr-progress'>
+        <div class='fr-progress-track'>
+            <div class='fr-progress-bar' style='width:{item["percent"]}%; background:{item["color"]};'></div>
+        </div>
+        <div class='fr-progress-label'>
+            <span>Impacto relativo en la organización</span>
+            <span>{item["percent"]}%</span>
+        </div>
+    </div>
+</div>
+        """
+        st.markdown(detail_html, unsafe_allow_html=True)
 
     st.markdown("<div class='section-title'>Evolución del Riesgo</div>", unsafe_allow_html=True)
 
