@@ -831,8 +831,8 @@ st.markdown("""
         background: #eef4ff;
         border: 1px solid #d7e3ff;
         border-radius: 14px;
-        padding: 16px 18px;
-        margin-bottom: 18px;
+        padding: 14px 16px;
+        margin-bottom: 14px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
 
@@ -852,7 +852,7 @@ st.markdown("""
     .fr-summary-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 10px;
+        gap: 8px;
     }
 
     .fr-summary-item {
@@ -925,12 +925,12 @@ st.markdown("""
         border: 1px solid #e9edf3;
         border-radius: 14px;
         overflow: hidden;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
         background: white;
     }
 
     .fr-detail-header {
-        padding: 14px 18px;
+        padding: 12px 16px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -957,7 +957,7 @@ st.markdown("""
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 10px;
-        padding: 12px 18px 8px 18px;
+        padding: 10px 16px 8px 16px;
     }
 
     .fr-metric-chip {
@@ -970,7 +970,7 @@ st.markdown("""
     }
 
     .fr-progress {
-        padding: 0 18px 14px 18px;
+        padding: 0 16px 12px 16px;
     }
 
     .fr-progress-track {
@@ -1973,20 +1973,6 @@ with tabs[3]:
         """,
         unsafe_allow_html=True
     )
-
-    fcols = st.columns(4)
-    for idx, item in enumerate(risk_factors):
-        card_html = f"""
-<div class='fr-factor-card' style='background:{item["bg"]}; border-color:{item["border"]};'>
-    <div class='fr-factor-top'>
-        <div class='fr-icon' style='color:{item["color"]}; border-color:{item["border"]};'>{item["name"][:2].upper()}</div>
-        <div class='fr-factor-title'>{item["name"]}</div>
-    </div>
-    <div class='fr-factor-desc'>{item["desc"]}</div>
-    <div class='fr-factor-pct' style='color:{item["color"]};'>{item["percent"]}%</div>
-</div>
-        """
-        fcols[idx].markdown(card_html, unsafe_allow_html=True)
 
     for item in risk_factors:
         metrics_html = "".join([f"<div class='fr-metric-chip'>{m}</div>" for m in item["metrics"]])
