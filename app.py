@@ -625,6 +625,122 @@ st.markdown("""
         font-weight: 600;
     }
 
+    /* RECOMENDACIONES (ACORDEON) */
+    details.rec-accordion {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #e9edf3;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        margin-bottom: 12px;
+        overflow: hidden;
+    }
+
+    details.rec-accordion[open] {
+        box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+
+    details.rec-accordion > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        font-weight: 700;
+        color: #16337b;
+    }
+
+    details.rec-accordion > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .rec-summary-left {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .rec-summary-meta {
+        font-size: 12px;
+        color: #7a8aa0;
+        font-weight: 600;
+    }
+
+    .rec-priority {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .priority-high {
+        background: #ffe9ee;
+        color: #a63545;
+    }
+
+    .priority-medium {
+        background: #fff4e8;
+        color: #8b6a00;
+    }
+
+    .priority-low {
+        background: #e8f7f1;
+        color: #1f7a5c;
+    }
+
+    .rec-details {
+        padding: 0 18px 16px 18px;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .rec-details .rec-description {
+        margin: 10px 0 12px 0;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .rec-tags {
+        margin-top: 10px;
+        margin-bottom: 6px;
+    }
+
+    .rec-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 18px;
+        font-size: 13px;
+        color: #555;
+    }
+
+    .rec-meta-grid b {
+        color: #16337b;
+    }
+
+    .owner-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 600;
+        color: #16337b;
+    }
+
+    .owner-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #2ecc71;
+        box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.16);
+        display: inline-block;
+    }
+
+    .owner-dot.inactive {
+        background: #b5b5b5;
+        box-shadow: 0 0 0 3px rgba(181, 181, 181, 0.18);
+    }
+
     /* TABLA EMPLEADOS */
     .stDataFrame {
         background-color: white !important;
@@ -1687,6 +1803,7 @@ with tabs[5]:
             "impact": "Reducción del 25-30% en niveles de estrés en 3 meses",
             "owner": "María Torres",
             "date": "15 Jun 2026",
+            "due": "30 Jun 2026",
         },
         {
             "title": "Redistribuir Carga de Trabajo en Subdivisión Norte",
@@ -1700,6 +1817,7 @@ with tabs[5]:
             "impact": "Reducción del 20% en carga laboral",
             "owner": "Carlos Ruiz",
             "date": "12 Jun 2026",
+            "due": "26 Jun 2026",
         },
         {
             "title": "Programa de Prevención de Burnout para Alto Riesgo",
@@ -1713,6 +1831,7 @@ with tabs[5]:
             "impact": "Reducción del 30% en burnout",
             "owner": "Ana Martín",
             "date": "10 Jun 2026",
+            "due": "24 Jun 2026",
         },
         {
             "title": "Capacitación en Gestión de Tiempo para Mandos Medios",
@@ -1726,6 +1845,7 @@ with tabs[5]:
             "impact": "Mejora del 15% en cumplimiento de plazos",
             "owner": "Javier López",
             "date": "05 Jun 2026",
+            "due": "20 Jun 2026",
         },
         {
             "title": "Encuesta de Clima Psicosocial y Bienestar",
@@ -1739,6 +1859,7 @@ with tabs[5]:
             "impact": "Mejor detección temprana de riesgos",
             "owner": "Lucía Vega",
             "date": "02 Jun 2026",
+            "due": "18 Jun 2026",
         },
         {
             "title": "Seguimiento Post-intervención de Alto Riesgo",
@@ -1752,6 +1873,7 @@ with tabs[5]:
             "impact": "Asegurar continuidad y sostenibilidad",
             "owner": "Paula Ríos",
             "date": "28 May 2026",
+            "due": "12 Jun 2026",
         },
     ]
 
@@ -1842,25 +1964,60 @@ with tabs[5]:
         apply_plotly_style(fig_pri)
         st.plotly_chart(fig_pri, use_container_width=True)
 
+    owner_status_map = {}
+    if "employee_name" in df.columns and "active_status" in df.columns:
+        owner_status_map = df.set_index("employee_name")["active_status"].to_dict()
+
+    def resolve_owner_status(name):
+        status = owner_status_map.get(name)
+        if status:
+            return status
+        score = sum(ord(c) for c in name) % 100
+        return "Activo" if score < 78 else "Inactivo"
+
+    priority_class_map = {
+        "Alta": "priority-high",
+        "Media": "priority-medium",
+        "Baja": "priority-low",
+    }
+
     if not recs_filtered:
         st.info("No hay recomendaciones con los filtros seleccionados.")
     else:
         for rec in recs_filtered:
+            priority_class = priority_class_map.get(rec["priority"], "priority-medium")
+            owner_status = resolve_owner_status(rec["owner"])
+            owner_status_class = "inactive" if owner_status == "Inactivo" else ""
             tags_html = "".join([f"<span class='rec-tag'>{tag}</span>" for tag in rec["tags"]])
-            st.markdown(
-                "<div class='rec-card'>"
-                f"{tags_html}"
-                f"<div class='rec-title'>{rec['title']}</div>"
-                f"<div class='rec-meta'>{rec['summary']}</div>"
-                f"<div class='rec-description'>{rec['description']}</div>"
-                "<div class='rec-meta'>"
-                f"<b>Dirigido a:</b> {rec['target']}<br>"
-                f"<b>Impacto Esperado:</b> {rec['impact']}<br>"
-                f"<b>Responsable:</b> {rec['owner']}<br>"
-                f"<b>Fecha de creación:</b> {rec['date']}"
-                "</div>"
-                "</div>",
-                unsafe_allow_html=True
-            )
+            rec_html = f"""
+<details class='rec-accordion'>
+    <summary>
+        <div class='rec-summary-left'>
+            <div class='rec-title'>{rec['title']}</div>
+            <div class='rec-summary-meta'>{rec['category']} · {rec['status']}</div>
+        </div>
+        <div class='rec-summary-right'>
+            <span class='rec-priority {priority_class}'>{rec['priority']}</span>
+        </div>
+    </summary>
+    <div class='rec-details'>
+        <div class='rec-tags'>{tags_html}</div>
+        <div class='rec-description'>{rec['summary']}</div>
+        <div class='rec-description'>{rec['description']}</div>
+        <div class='rec-meta-grid'>
+            <div><b>Dirigido a:</b> {rec['target']}</div>
+            <div><b>Impacto esperado:</b> {rec['impact']}</div>
+            <div><b>Responsable:</b>
+                <span class='owner-status'><span class='owner-dot {owner_status_class}'></span>
+                {rec['owner']} ({owner_status})</span>
+            </div>
+            <div><b>Estado:</b> {rec['status']}</div>
+            <div><b>Fecha de creación:</b> {rec['date']}</div>
+            <div><b>Fecha límite:</b> {rec['due']}</div>
+        </div>
+    </div>
+</details>
+            """
+            st.markdown(rec_html, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
