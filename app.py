@@ -1739,15 +1739,16 @@ with tabs[1]:
 
             selected_emp_id = int(st.session_state.selected_emp_id)
 
-            st.markdown("<div class='employee-list-scroll'>", unsafe_allow_html=True)
-            for row in list_df.head(30).itertuples(index=False):
-                name_parts = row.employee_name.split()
-                initials = name_parts[0][0] + (name_parts[-1][0] if len(name_parts) > 1 else "")
-                presence_class = "inactive" if row.active_status == "Inactivo" else ""
-                risk_class = "risk-low" if row.risk_level == "Bajo" else "risk-mid" if row.risk_level == "Medio" else "risk-high"
-                card_class = "employee-card selected" if row.employee_id == selected_emp_id else "employee-card"
+            list_container = st.container(height=520)
+            with list_container:
+                for row in list_df.head(50).itertuples(index=False):
+                    name_parts = row.employee_name.split()
+                    initials = name_parts[0][0] + (name_parts[-1][0] if len(name_parts) > 1 else "")
+                    presence_class = "inactive" if row.active_status == "Inactivo" else ""
+                    risk_class = "risk-low" if row.risk_level == "Bajo" else "risk-mid" if row.risk_level == "Medio" else "risk-high"
+                    card_class = "employee-card selected" if row.employee_id == selected_emp_id else "employee-card"
 
-                card_html = f"""
+                    card_html = f"""
 <div class='{card_class}'>
     <div class='employee-left'>
         <div class='employee-avatar'>{initials}<span class='presence-dot {presence_class}'></span></div>
@@ -1758,12 +1759,11 @@ with tabs[1]:
     </div>
     <span class='risk-pill {risk_class}'>{row.risk_level} Riesgo</span>
 </div>
-                """
-                card_col, btn_col = st.columns([5, 1])
-                card_col.markdown(card_html, unsafe_allow_html=True)
-                if btn_col.button("Ver", key=f"emp_{row.employee_id}"):
-                    st.session_state.selected_emp_id = int(row.employee_id)
-            st.markdown("</div>", unsafe_allow_html=True)
+                    """
+                    card_col, btn_col = st.columns([5, 1])
+                    card_col.markdown(card_html, unsafe_allow_html=True)
+                    if btn_col.button("Ver", key=f"emp_{row.employee_id}"):
+                        st.session_state.selected_emp_id = int(row.employee_id)
 
     with right:
         if df_emp.empty:
